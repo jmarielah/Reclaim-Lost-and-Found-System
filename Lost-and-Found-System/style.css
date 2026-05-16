@@ -1,0 +1,16 @@
+body,
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* BACKGROUND LOGIN, REGISTER */
+.bg-image {
+    background-image: url('img/bg.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    background-attachment: fixed;
+}
