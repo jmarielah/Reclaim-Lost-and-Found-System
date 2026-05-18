@@ -77,45 +77,45 @@
                     <!-- ITEM CARD (UPLOADER + ADMIN PERSPECTIVE) -->
                     <?php while ($row = $result->fetch_assoc()) { ?>
 
-    <?php
-        // status badge
-        if ($row['status'] == 'claimed') {
-            $badgeClass = 'bg-success';
-        } elseif ($row['status'] == 'disposed') {
-            $badgeClass = 'bg-danger';
-        } else {
-            $badgeClass = 'bg-dark';
-        }
-    ?>
+                    <?php
+                        // status badge
+                        if ($row['status'] == 'claimed') {
+                            $badgeClass = 'bg-success';
+                        } elseif ($row['status'] == 'disposed') {
+                            $badgeClass = 'bg-danger';
+                        } else {
+                            $badgeClass = 'bg-dark';
+                        }
+                    ?>
 
-    <div class="col-md-2" data-bs-toggle="modal" data-bs-target="#item-modal1">
+                    <div class="col-md-2" >
 
-        <div class="card shadow-sm border h-100" style="cursor:pointer;">
-            <div class="card-body align-items-center text-center">
+                        <div class="card shadow-sm border h-100" data-id="<?= $row['item_id'] ?>" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#item-modal1">
+                            <div class="card-body align-items-center text-center">
 
-                <img src="img/logo.png"
-                     alt=""
-                     class="rounded"
-                     style="width:100%;height:180px;object-fit:cover;">
+                                <img src="img/logo.png"
+                                    alt=""
+                                    class="rounded"
+                                    style="width:100%;height:180px;object-fit:cover;">
 
-                <h6 class="fw-bold mt-2 mb-0">
-                    <?= htmlspecialchars($row['item_name']) ?>
-                </h6>
+                                <h6 class="fw-bold mt-2 mb-0">
+                                    <?= htmlspecialchars($row['item_name']) ?>
+                                </h6>
 
-                <small class="text-muted">
-                    Location Found: <?= htmlspecialchars($row['location_found']) ?>
-                </small>
+                                <small class="text-muted">
+                                    Location Found: <?= htmlspecialchars($row['location_found']) ?>
+                                </small>
 
-                <span class="badge <?= $badgeClass ?> text-light rounded-pill ms-3 px-3 py-2">
-                    <?= ucfirst($row['status']) ?>
-                </span>
+                                <span class="badge <?= $badgeClass ?> text-light rounded-pill ms-3 px-3 py-2">
+                                    <?= ucfirst($row['status']) ?>
+                                </span>
 
-            </div>
-        </div>
+                            </div>
+                        </div>
 
-    </div>
+                    </div>
 
-<?php } ?>
+                <?php } ?>
 
                     <!-- ITEM CARD (NON-UPLOADER PERSPECTIVE) -->
                     <div class="col-md-2" data-bs-toggle="modal" data-bs-target="#item-modal2">
@@ -140,5 +140,60 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+        <script>
+
+            let currentItemId = null;
+
+            document.querySelectorAll(".card[data-id]").forEach(card => {
+                card.addEventListener("click", function () {
+                    
+                    loadItem(this.dataset.id);
+                });
+            });
+            function loadItem(id) {
+                currentItemId = id;
+
+                fetch("actions/get_item.php?id=" + id)
+                    .then(res => res.json())
+                    .then(data => {
+
+                        // TEXT FIELDS
+                        document.querySelector("#item-modal1 .item-name").innerText =
+                            data.item_name ?? "N/A";
+
+                        document.querySelector("#item-modal1 .item-location").innerText =
+                            data.location_found ?? "N/A";
+
+                        document.querySelector("#item-modal1 .item-date").innerText =
+                            data.date_found ?? "N/A";
+
+                        document.querySelector("#item-modal1 .item-desc").innerText =
+                            data.description ?? "No description";
+
+                        document.querySelector("#item-modal1 .item-uploader").innerText =
+                            ((data.f_name ?? "") + " " + (data.l_name ?? "")).trim();
+
+                        // STATUS BADGE (IMPORTANT)
+                        const badge = document.querySelector("#item-modal1 .modal-header .badge");
+
+                        if (data.status === "claimed") {
+                            badge.className = "badge bg-success text-light rounded-pill ms-3 px-3 py-2";
+                            badge.innerText = "Claimed";
+                        } 
+                        else if (data.status === "disposed") {
+                            badge.className = "badge bg-danger text-light rounded-pill ms-3 px-3 py-2";
+                            badge.innerText = "Disposed";
+                        } 
+                        else {
+                            badge.className = "badge bg-dark text-light rounded-pill ms-3 px-3 py-2";
+                            badge.innerText = "Found";
+                        }
+
+                    })
+                    .catch(err => {
+                        console.error("Error loading item:", err);
+                    });
+            }
+        </script>
     </body>
 </html>

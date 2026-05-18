@@ -219,7 +219,7 @@
 
             <div class="modal-header">
                 <h5 class="modal-title fw-bold">Item Details</h5>
-                <span class="badge bg-success text-light rounded-pill ms-3 px-3 py-2">Claimed</span>
+                <span class="badge rounded-pill ms-3 px-3 py-2"></span>
                 <!-- Other status states (use conditional statements) -->
                 <!--<span class="badge bg-dark text-light rounded-pill ms-3 px-3 py-2">Found</span>-->
                 <!--<span class="badge bg-danger text-light rounded-pill ms-3 px-3 py-2">Disposed</span>-->

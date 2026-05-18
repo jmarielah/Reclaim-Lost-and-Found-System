@@ -1,8 +1,15 @@
 <?php
+header('Content-Type: application/json');
+
 include '../config/config.php';
 
-$id = $_GET['id'];
-$type = $_GET['type'];
+$id = $_GET['id'] ?? null;
+$type = $_GET['type'] ?? 'item';
+
+if (!$id) {
+    echo json_encode(["error" => "Missing ID"]);
+    exit;
+}
 
 if ($type == "item") {
 
@@ -20,8 +27,16 @@ if ($type == "item") {
 }
 
 $stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    echo json_encode(["error" => $conn->error]);
+    exit;
+}
+
 $stmt->bind_param("i", $id);
 $stmt->execute();
 
-echo json_encode($stmt->get_result()->fetch_assoc());
-?>
+$result = $stmt->get_result();
+$data = $result->fetch_assoc();
+
+echo json_encode($data ?: []);
