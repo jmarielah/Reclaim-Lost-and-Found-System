@@ -125,6 +125,7 @@
 
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">Phone Number</label>
+<<<<<<< HEAD
                                     <input type="text" name="phone" class="form-control" placeholder="Enter phone number" required>
                                 </div>
 
@@ -136,6 +137,21 @@
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">Department</label>
                                     <input type="text" name="department" class="form-control" placeholder="Enter department" required>
+=======
+                                    <input type="text" class="form-control" placeholder="Enter phone number" required>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-semibold">ID Number</label>
+                                        <input type="text" class="form-control" placeholder="Enter ID number" required>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-semibold">Department</label>
+                                        <input type="text" class="form-control" placeholder="Enter department" required>
+                                    </div>
+>>>>>>> 0b56e83c8319586473f5331eff6e8586d622ee0e
                                 </div>
 
                                 <div class="row">
