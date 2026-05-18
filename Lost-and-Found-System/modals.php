@@ -123,27 +123,36 @@
                         <img src="img/logo.png" alt="No Image" class="img-fluid rounded shadow-sm" style="max-height: 250px;">
                     </div>
                     <div class="col-md-7 ps-4">
-                        <h6 class="text-uppercase text-muted small fw-bold">Found Item</h6>
-                        <p class="fs-5">Phone</p>
-                        
-                        <h6 class="text-uppercase text-muted small fw-bold">Location</h6>
-                        <p class="fs-5">Library</p>
-                        
-                        <h6 class="text-uppercase text-muted small fw-bold">Date Found</h6>
-                        <p class="fs-5">May 16, 2026</p>
-                        
-                        <h6 class="text-uppercase text-muted small fw-bold">Note</h6>
-                        <p class="fs-6">Clear casing and found in a bookshelf. Contact user if it is yours.</p>
+                        <h6 class="text-uppercase text-muted small fw-bold">Lost Item</h6>
+                        <p class="fs-5 item-name"></p>
+
+                        <h6 class="text-uppercase text-muted small fw-bold">Location(Last Seen)</h6>
+                        <p class="fs-5 item-location"></p>
+
+                        <h6 class="text-uppercase text-muted small fw-bold">Date Lost</h6>
+                        <p class="fs-5 item-date"></p>
+
+                        <h6 class="text-uppercase text-muted small fw-bold">Description</h6>
+                        <p class="fs-6 item-desc"></p>
                         
                         <hr>
-                        <p class="small text-secondary">Uploaded by: Orlie Louise</p>
+                        <p class="small text-secondary">Uploaded by: <span class="item-uploader"></span></p>
                     </div>
                 </div>
             </div>
             
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Reject</button>
-                <button type="button" class="btn text-white" style="background-color: #311432;">Verify & Post</button>
+                <button type="button"
+                    class="btn btn-outline-danger"
+                    onclick="rejectPost(currentId, currentType)">
+                    Reject
+                </button>
+                <button type="button"
+                    class="btn text-white"
+                    style="background-color: #311432;"
+                    onclick="verifyPost(currentId, currentType)">
+                    Verify & Post
+                </button>
             </div>
 
         </div>
@@ -167,26 +176,35 @@
                     </div>
                     <div class="col-md-7 ps-4">
                         <h6 class="text-uppercase text-muted small fw-bold">Lost Item</h6>
-                        <p class="fs-5">Phone</p>
-                        
+                        <p class="fs-5 item-name"></p>
+
                         <h6 class="text-uppercase text-muted small fw-bold">Location(Last Seen)</h6>
-                        <p class="fs-5">Library</p>
-                        
+                        <p class="fs-5 item-location"></p>
+
                         <h6 class="text-uppercase text-muted small fw-bold">Date Lost</h6>
-                        <p class="fs-5">May 16, 2026</p>
-                        
+                        <p class="fs-5 item-date"></p>
+
                         <h6 class="text-uppercase text-muted small fw-bold">Description</h6>
-                        <p class="fs-6">Clear casing, lost it while looking for a book at Circulation A-B.</p>
+                        <p class="fs-6 item-desc"></p>
                         
                         <hr>
-                        <p class="small text-secondary">Uploaded by: Jeannie Hernandez</p>
+                        <p class="small text-secondary">Uploaded by: <span class="item-uploader"></span></p>
                     </div>
                 </div>
             </div>
             
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Reject</button>
-                <button type="button" class="btn text-white" style="background-color: #311432;">Verify & Post</button>
+                <button type="button"
+                    class="btn btn-outline-danger"
+                    onclick="rejectPost(currentId, currentType)">
+                    Reject
+                </button>
+                <button type="button"
+                    class="btn text-white"
+                    style="background-color: #311432;"
+                    onclick="verifyPost(currentId, currentType)">
+                    Verify & Post
+                </button>
             </div>
 
         </div>
@@ -226,19 +244,19 @@
 
                     <div class="col-md-7 ps-4">
                         <h6 class="text-uppercase text-muted small fw-bold">Found Item</h6>
-                        <p class="fs-5">Phone</p>
+                        <p class="fs-5 item-name"></p>
                         
                         <h6 class="text-uppercase text-muted small fw-bold">Location</h6>
-                        <p class="fs-5">Library</p>
+                        <p class="fs-5 item-location"></p>
                         
                         <h6 class="text-uppercase text-muted small fw-bold">Date Found</h6>
-                        <p class="fs-5">May 16, 2026</p>
+                        <p class="fs-5 item-date"></p>
                         
                         <h6 class="text-uppercase text-muted small fw-bold">Description</h6>
-                        <p class="fs-6">Clear casing and found in a bookshelf. Claim if it is yours.</p>
+                        <p class="fs-6 item-desc"></p>
                         
                         <hr>
-                        <p class="small text-secondary">Uploaded by: Orlie Lacerona</p>
+                        <p class="small text-secondary">Uploaded by: <span class="item-uploader"></span></p>
                     </div>
                 </div>
             </div>

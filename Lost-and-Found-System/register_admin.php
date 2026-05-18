@@ -5,59 +5,66 @@
     ?>
 
     <?php
-    include 'config/config.php';
+        include 'config/config.php';
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $message = "";
 
-        $email = trim($_POST['email']);
-        $password = trim($_POST['password']);
-        $firstname = trim($_POST['firstname']);
-        $lastname = trim($_POST['lastname']);
-        $department = trim($_POST['department']);
-        $idnumber = trim($_POST['idnumber']);
-        $user_id = trim($_POST['idnumber']);
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $email = trim($_POST['email']);
+            $password = trim($_POST['password']);
+            $firstname = trim($_POST['firstname']);
+            $lastname = trim($_POST['lastname']);
+            $phone = trim($_POST['phone']);
+            $department = trim($_POST['department']);
+            $idnumber = trim($_POST['idnumber']);
 
-        $role = "admin";
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $role = "admin";
 
-        // OPTIONAL: use ID number as user_id OR auto increment (recommended)
-        
+            try {
 
-        // INSERT INTO USERS
-        $sql = "INSERT INTO users
-            (user_id, email, password, role, f_name, l_name, phone_no, department)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO users 
+                    (email, password, role, f_name, l_name, phone_no, department, user_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        $stmt = $conn->prepare($sql);
+                $stmt = $conn->prepare($sql);
 
-        // using idnumber as phone_no since your table has no id_number column
-        $stmt->bind_param(
-            "isssssss",
-            $user_id,
-            $email,
-            $hashed_password,
-            $role,
-            $firstname,
-            $lastname,
-            $idnumber,
-            $department
-        );
+                $stmt->bind_param(
+                    "ssssssss",
+                    $email,
+                    $hashed_password,
+                    $role,
+                    $firstname,
+                    $lastname,
+                    $phone,
+                    $department,
+                    $idnumber
+                );
 
-        if ($stmt->execute()) {
-            echo "
-            <div class='alert alert-success text-center m-3'>
-                Admin Registered Successfully!
-            </div>
-            ";
-        } else {
-            echo "
-            <div class='alert alert-danger text-center m-3'>
-                Registration Failed (Email might already exist)
-            </div>
-            ";
+                $stmt->execute();
+
+                $message = "<div class='alert alert-success text-center m-3'>
+                                Admin Registered Successfully!
+                            </div>";
+
+            } catch (mysqli_sql_exception $e) {
+
+                // Duplicate entry error (email OR user_id)
+                if ($e->getCode() == 1062) {
+
+                    $message = "<div class='alert alert-warning text-center m-3'>
+                                    Email or ID Number already exists!
+                                </div>";
+
+                } else {
+
+                    $message = "<div class='alert alert-danger text-center m-3'>
+                                    Database error occurred.
+                                </div>";
+                }
+            }
         }
-    }
     ?>
 
     <body>
@@ -94,14 +101,18 @@
                                         <input type="text" name="firstname" class="form-control" placeholder="Enter first name" required>
                                     </div>
 
-                                    <div class="col-md-6 mb-3">
+                                <div class="col-md-6 mb-3">
                                         <label class="form-label fw-semibold">Last Name</label>
                                         <input type="text" name="lastname" class="form-control" placeholder="Enter last name" required>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-<<<<<<< HEAD
+                                    <label class="form-label fw-semibold">Phone Number</label>
+                                    <input type="text" name="phone" class="form-control" placeholder="Enter phone number" required>
+                                </div>
+
+                                <div class="mb-3">
                                     <label class="form-label fw-semibold">Department</label>
                                     <input type="text" name="department" class="form-control" placeholder="Enter department/office" required>
                                 </div>
@@ -109,22 +120,6 @@
                                 <div class="mb-4">
                                     <label class="form-label fw-semibold">ID Number</label>
                                     <input type="text" name="idnumber" class="form-control" placeholder="Enter ID number" required>
-=======
-                                    <label class="form-label fw-semibold">Phone Number</label>
-                                    <input type="text" class="form-control" placeholder="Enter phone number" required>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-semibold">ID Number</label>
-                                        <input type="text" class="form-control" placeholder="Enter ID number" required>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-semibold">Department</label>
-                                        <input type="text" class="form-control" placeholder="Enter department" required>
-                                    </div>
->>>>>>> 0b56e83c8319586473f5331eff6e8586d622ee0e
                                 </div>
 
                                 <div class="d-grid">

@@ -8,6 +8,8 @@
     <?php
         include 'config/config.php';
 
+        $message = "";
+
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $email = trim($_POST['email']);
@@ -21,65 +23,70 @@
             $course = trim($_POST['course']);
 
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
             $role = "student";
 
-            // USE ID NUMBER FROM FORM (NOT RANDOM)
-            $user_id = $idnumber;
+            $conn->begin_transaction();
 
-            // INSERT INTO USERS
-            $sql_users = "INSERT INTO users
-            (user_id, email, password, role, f_name, l_name, phone_no, department)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            try {
 
-            $stmt = $conn->prepare($sql_users);
+                // INSERT INTO USERS
+                $sql_users = "INSERT INTO users 
+                    (user_id, email, password, role, f_name, l_name, phone_no, department)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-            $stmt->bind_param(
-                "isssssss",
-                $user_id,
-                $email,
-                $hashed_password,
-                $role,
-                $firstname,
-                $lastname,
-                $phone,
-                $department
-            );
+                $stmt = $conn->prepare($sql_users);
 
-            if ($stmt->execute()) {
+                $stmt->bind_param(
+                    "isssssss",
+                    $idnumber,
+                    $email,
+                    $hashed_password,
+                    $role,
+                    $firstname,
+                    $lastname,
+                    $phone,
+                    $department
+                );
+
+                $stmt->execute();
 
                 // INSERT INTO STUDENTS
-                $sql_students = "INSERT INTO students
-                (user_id, course, year_level)
-                VALUES (?, ?, ?)";
+                $sql_students = "INSERT INTO students 
+                    (user_id, course, year_level)
+                    VALUES (?, ?, ?)";
 
                 $stmt2 = $conn->prepare($sql_students);
 
                 $stmt2->bind_param(
                     "isi",
-                    $user_id,
+                    $idnumber,
                     $course,
                     $yearlevel
                 );
 
-                if ($stmt2->execute()) {
+                $stmt2->execute();
 
-                    echo "<div class='alert alert-success text-center m-3'>
-                            Student Registered Successfully!
-                        </div>";
+                $conn->commit();
+
+                $message = "<div class='alert alert-success text-center m-3'>
+                                Student Registered Successfully!
+                            </div>";
+
+            } catch (mysqli_sql_exception $e) {
+
+                $conn->rollback();
+                if ($e->getCode() == 1062) {
+
+                    $message = "<div class='alert alert-warning text-center m-3'>
+                                    Email or ID Number already exists!
+                                </div>";
 
                 } else {
 
-                    echo "<div class='alert alert-danger text-center m-3'>
-                            Failed to register student details.
-                        </div>";
+                    $message = "<div class='alert alert-danger text-center m-3'>
+                                    Database error occurred.
+                                </div>";
                 }
-
-            } else {
-
-                echo "<div class='alert alert-danger text-center m-3'>
-                        Email or ID number already exists.
-                    </div>";
             }
         }
     ?>
@@ -88,7 +95,7 @@
             <div class="mask d-flex align-items-center h-100">
                 <div class="container d-flex justify-content-center align-items-center min-vh-100 py-5">
 
-                    <!-- ADMIN REGISTRATION CARD -->
+                    <!-- STUDENT REGISTRATION CARD -->
                     <div class="card shadow-sm" style="width: 100%; max-width: 35rem;">
                         <div class="card-body p-4">
 
@@ -125,7 +132,6 @@
 
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">Phone Number</label>
-<<<<<<< HEAD
                                     <input type="text" name="phone" class="form-control" placeholder="Enter phone number" required>
                                 </div>
 
@@ -137,21 +143,6 @@
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold">Department</label>
                                     <input type="text" name="department" class="form-control" placeholder="Enter department" required>
-=======
-                                    <input type="text" class="form-control" placeholder="Enter phone number" required>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-semibold">ID Number</label>
-                                        <input type="text" class="form-control" placeholder="Enter ID number" required>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-semibold">Department</label>
-                                        <input type="text" class="form-control" placeholder="Enter department" required>
-                                    </div>
->>>>>>> 0b56e83c8319586473f5331eff6e8586d622ee0e
                                 </div>
 
                                 <div class="row">
