@@ -235,8 +235,10 @@
                                 <label for="claimerID" class="form-label small fw-bold text-muted text-uppercase d-block text-start">Claimer ID Number</label>
                                 <input type="text" class="form-control form-control-sm" id="claimerID" placeholder="Enter ID Number" required>
                             </div>
-                            <button type="button" class="btn btn-sm w-100 text-white shadow-sm" style="background-color: #311432;"
-                            data-bs-dismiss="modal">
+                            <button type="button"
+                                class="btn btn-sm w-100 text-white shadow-sm"
+                                style="background-color: #311432;"
+                                id="claimBtn">
                                 <i class="bi bi-check2-circle"></i> Item Claimed
                             </button>
                         </div>
@@ -263,8 +265,8 @@
             
             <!-- NOTE: only add this footer if the user is an ADMIN/UPLOADER -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Edit</button>
-                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Delete</button>
+                <button type="button" class="btn btn-outline-dark" id="editBtn" data-bs-toggle="modal" data-bs-target="#edit-item-modal" data-bs-dismiss="modal" >Edit</button>
+                <button type="button" class="btn btn-outline-danger" id="deleteBtn">Delete</button>
             </div>
 
         </div>
@@ -317,10 +319,6 @@
             </div>
 
             <!-- NOTE: only add this footer if the user is an ADMIN/UPLOADER -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#edit-item-modal" data-bs-dismiss="modal" >Edit</button>
-                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Delete</button>
-            </div>
 
         </div>
     </div>
@@ -399,14 +397,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form>
+            <form id="editItemForm">
                 <div class="modal-body">
 
                     <div class="mb-3 text-center">
-                        <label for="itemImage" class="form-label d-block text-start fw-semibold">Item Image</label>
+                        <label for="itemImage" class="form-label d-block text-start fw-semibold">Item Image</label> 
                         <div class="border rounded p-3 bg-light d-flex flex-column align-items-center justify-content-center" style="height: 150px; border-style: dashed !important;">
                             <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
-                            <input type="file" class="form-control form-control-sm mt-2" id="itemImage" name="item_image" accept="image/*" required>
+                            <input type="file" class="form-control form-control-sm mt-2" id="itemImage" name="item_image" accept="image/*">
                         </div>
                     </div>
                     <div class="mb-3">

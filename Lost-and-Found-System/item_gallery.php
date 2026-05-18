@@ -17,7 +17,7 @@ include 'config/config.php';
     <?php
         include 'config/config.php';
 
-        $sql = "SELECT * FROM items ORDER BY created_at DESC";
+        $sql = "SELECT * FROM items WHERE ver_status = 'approved' ORDER BY created_at DESC";
         $result = $conn->query($sql);
     ?>
 
@@ -146,59 +146,197 @@ include 'config/config.php';
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
         <script>
+let currentItemId = null;
+let currentItem = null;
 
-            let currentItemId = null;
+document.addEventListener("DOMContentLoaded", function () {
 
-            document.querySelectorAll(".card[data-id]").forEach(card => {
-                card.addEventListener("click", function () {
-                    
-                    loadItem(this.dataset.id);
-                });
-            });
-            function loadItem(id) {
-                currentItemId = id;
+    // CARD CLICK (LOAD ITEM)
+    document.querySelectorAll(".card[data-id]").forEach(card => {
+        card.addEventListener("click", function () {
+            loadItem(this.dataset.id);
+        });
+    });
 
-                fetch("actions/get_item.php?id=" + id)
-                    .then(res => res.json())
-                    .then(data => {
+    // DELETE BUTTON
+    const deleteBtn = document.getElementById("deleteBtn");
+    if (deleteBtn) {
+        deleteBtn.addEventListener("click", function () {
 
-                        // TEXT FIELDS
-                        document.querySelector("#item-modal1 .item-name").innerText =
-                            data.item_name ?? "N/A";
+            if (!currentItemId) return;
+            if (!confirm("Are you sure you want to delete this item?")) return;
 
-                        document.querySelector("#item-modal1 .item-location").innerText =
-                            data.location_found ?? "N/A";
+            fetch("actions/delete.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "id=" + currentItemId
+            })
+            .then(res => res.text())
+            .then(() => {
 
-                        document.querySelector("#item-modal1 .item-date").innerText =
-                            data.date_found ?? "N/A";
+                bootstrap.Modal.getInstance(
+                    document.getElementById("item-modal1")
+                ).hide();
 
-                        document.querySelector("#item-modal1 .item-desc").innerText =
-                            data.description ?? "No description";
+                document.querySelector(`[data-id="${currentItemId}"]`)
+                    ?.closest(".col-md-2")
+                    ?.remove();
+            })
+            .catch(err => console.error(err));
+        });
+    }
 
-                        document.querySelector("#item-modal1 .item-uploader").innerText =
-                            ((data.f_name ?? "") + " " + (data.l_name ?? "")).trim();
+    // EDIT BUTTON
+    const editBtn = document.getElementById("editBtn");
+    if (editBtn) {
+        editBtn.addEventListener("click", function () {
 
-                        // STATUS BADGE (IMPORTANT)
-                        const badge = document.querySelector("#item-modal1 .modal-header .badge");
+            if (!currentItem) return;
+            
 
-                        if (data.status === "claimed") {
-                            badge.className = "badge bg-success text-light rounded-pill ms-3 px-3 py-2";
-                            badge.innerText = "Claimed";
-                        } 
-                        else if (data.status === "disposed") {
-                            badge.className = "badge bg-danger text-light rounded-pill ms-3 px-3 py-2";
-                            badge.innerText = "Disposed";
-                        } 
-                        else {
-                            badge.className = "badge bg-dark text-light rounded-pill ms-3 px-3 py-2";
-                            badge.innerText = "Found";
-                        }
+            document.querySelector("#edit-item-modal input[name='item_name']").value =
+                currentItem.item_name ?? "";
 
-                    })
-                    .catch(err => {
-                        console.error("Error loading item:", err);
-                    });
+            document.querySelector("#edit-item-modal input[name='location']").value =
+                currentItem.location_found ?? "";
+
+            document.querySelector("#edit-item-modal textarea[name='description']").value =
+                currentItem.description ?? "";
+
+            document.querySelector("#edit-item-modal input[name='date_found']").value =
+                currentItem.date_found ?? "";
+
+            document.querySelector("#edit-item-modal select[name='category']").value =
+                (currentItem.category ?? "").trim();
+        });
+    }
+
+
+    document.getElementById("editItemForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    if (!currentItem) return;
+
+    const formData = new FormData(this);
+    formData.append("item_id", currentItem.item_id);
+
+    fetch("actions/update.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.text())
+    .then(response => {
+
+        console.log(response);
+
+        // close modal
+        bootstrap.Modal.getInstance(
+            document.getElementById("edit-item-modal")
+        ).hide();
+
+        // refresh data
+        loadItem(currentItem.item_id);
+        location.reload();
+
+    })
+    .catch(err => console.error(err));
+});
+
+});
+
+
+// LOAD ITEM FUNCTION
+function loadItem(id) {
+
+    currentItemId = id;
+
+    fetch("actions/get_item.php?id=" + id)
+        .then(res => res.json())
+        .then(data => {
+
+            currentItem = data; // IMPORTANT (stores for edit)
+
+            document.querySelector("#item-modal1 .item-name").innerText =
+                data.item_name ?? "N/A";
+
+            document.querySelector("#item-modal1 .item-location").innerText =
+                data.location_found ?? "N/A";
+
+            document.querySelector("#item-modal1 .item-date").innerText =
+                data.date_found ?? "N/A";
+
+            document.querySelector("#item-modal1 .item-desc").innerText =
+                data.description ?? "No description";
+
+            document.querySelector("#item-modal1 .item-uploader").innerText =
+                ((data.f_name ?? "") + " " + (data.l_name ?? "")).trim();
+
+            const badge = document.querySelector("#item-modal1 .modal-header .badge");
+
+            if (data.status === "claimed") {
+                badge.className = "badge bg-success text-light rounded-pill ms-3 px-3 py-2";
+                badge.innerText = "Claimed";
+            } 
+            else if (data.status === "disposed") {
+                badge.className = "badge bg-danger text-light rounded-pill ms-3 px-3 py-2";
+                badge.innerText = "Disposed";
+            } 
+            else {
+                badge.className = "badge bg-dark text-light rounded-pill ms-3 px-3 py-2";
+                badge.innerText = "Found";
             }
+
+        })
+        .catch(err => console.error("Error loading item:", err));
+}
+
+
+// CLAIM BUTTON
+const claimBtn = document.getElementById("claimBtn");
+
+if (claimBtn) {
+
+    claimBtn.addEventListener("click", function () {
+
+        if (!currentItemId) return;
+
+        const claimerId = document.getElementById("claimerID").value;
+
+        if (!claimerId) {
+            alert("Please enter Claimer ID Number");
+            return;
+        }
+
+        fetch("actions/claim.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body:
+                "item_id=" + currentItemId +
+                "&claimer_id=" + encodeURIComponent(claimerId)
+        })
+        .then(res => res.text())
+        .then(response => {
+
+            console.log(response);
+
+            alert("Item claimed successfully");
+
+            // close modal
+            bootstrap.Modal.getInstance(
+                document.getElementById("item-modal1")
+            ).hide();
+
+            // optional: reload page to refresh badge
+            location.reload();
+        })
+        .catch(err => console.error(err));
+    });
+
+}
         </script>
 
         <script>
