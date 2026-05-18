@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+    <!-- this page displays reports from users who have lost their items.-->
     <?php
     include 'head.php';
     ?>
