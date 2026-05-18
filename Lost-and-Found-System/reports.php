@@ -129,9 +129,6 @@ include 'config/config.php';
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
         <script>
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
 let currentReportId = null;
 let currentReport = null;
 
@@ -267,17 +264,13 @@ document.getElementById("editReportForm").addEventListener("submit", function (e
     })
     .catch(err => console.error(err));
 });
-=======
->>>>>>> Stashed changes
+
             window.addEventListener("pageshow", function (event) {
                 if (event.persisted) {
                     window.location.reload();
                 }
             });
-<<<<<<< Updated upstream
-=======
->>>>>>> 26a437947bd39469fce4c157fcb813814e23c009
->>>>>>> Stashed changes
+
         </script>
 
     </body>
