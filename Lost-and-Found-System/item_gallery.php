@@ -1,3 +1,8 @@
+<?php
+include 'config/auth_check.php';
+include 'config/config.php';
+?>
+
 <!DOCTYPE html>
 <html>
     <!--
@@ -194,6 +199,14 @@
                         console.error("Error loading item:", err);
                     });
             }
+        </script>
+
+        <script>
+            window.addEventListener("pageshow", function (event) {
+                if (event.persisted) {
+                    window.location.reload();
+                }
+            });
         </script>
     </body>
 </html>
