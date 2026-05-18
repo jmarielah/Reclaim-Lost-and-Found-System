@@ -34,12 +34,17 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-semibold">First Name</label>
-                                        <input type="text" class="form-control" required>
+                                        <input type="text" class="form-control" placeholder="Enter first name" required>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-semibold">Last Name</label>
-                                        <input type="text" class="form-control" required>
+                                        <input type="text" class="form-control" placeholder="Enter last name" required>
                                     </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Department</label>
+                                    <input type="text" class="form-control" placeholder="Enter department/office" required>
                                 </div>
 
                                 <div class="mb-4">

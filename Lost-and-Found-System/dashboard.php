@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+    <!-- this page displays statistics (cards and pie chart) for both admin and users, only admins can access the verify section.-->
     <?php
     include 'head.php';
     ?>
@@ -63,6 +64,7 @@
                 </div>
             </div>
 
+            <!-- VERIFY SECTION -->
             <div class="row g-3 mb-5">
                 <!-- VERIFY ITEMS CARD -->
                 <div class="col-md-6">

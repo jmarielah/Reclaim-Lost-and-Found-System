@@ -54,6 +54,7 @@
                                             <th>ID Number</th>
                                             <th>Full Name</th>
                                             <th>Department</th>
+                                            <th>Account Creation Date</th>
                                             <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
@@ -62,6 +63,7 @@
                                             <td>1</td>
                                             <td>Orlie Lacerona</td>
                                             <td>CCE - BSCS</td>
+                                            <td>May 16, 2026</td>
                                             <td class="text-center">
                                                 <button class="btn btn-sm btn-light border"
                                                 data-bs-toggle="modal" data-bs-target="#contact-user-modal">View profile</button>

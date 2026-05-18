@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html>
+    <!--
+    this page displays items found and uploaded by users in hopes of finding its owner.
+    items have 3 status (found, claimed, disposed)
+    if an item is claimed, claim details will be recorded and displayed in records
+     once claimed, it will remain visible in the item gallery with the status "claimed" for another 30 days before the system removes it
+    -->
     <?php
     include 'head.php';
     ?>
@@ -69,6 +75,10 @@
                                 <img src="img/logo.png" alt="" class="rounded" style="width:100%;height:180px;object-fit:cover;">
                                 <h6 class="fw-bold mt-2 mb-0">Item Name</h6>
                                 <small class="text-muted">Location Found: Library</small>
+                                <span class="badge bg-success text-light rounded-pill ms-3 px-3 py-2">Claimed</span>
+                                <!-- Other status states (use conditional statements) -->
+                                <!--<span class="badge bg-dark text-light rounded-pill ms-3 px-3 py-2">Found</span>-->
+                                <!--<span class="badge bg-danger text-light rounded-pill ms-3 px-3 py-2">Disposed</span>-->
                             </div>
                         </div>
                     </div>
@@ -80,6 +90,10 @@
                                 <img src="img/logo.png" alt="" class="rounded" style="width:100%;height:180px;object-fit:cover;">
                                 <h6 class="fw-bold mt-2 mb-0">Item Name</h6>
                                 <small class="text-muted">Location Found: Library</small>
+                                <span class="badge bg-dark text-light rounded-pill ms-3 px-3 py-2">Found</span>
+                                <!-- Other status states (use conditional statements) -->
+                                <!--<span class="badge bg-success text-light rounded-pill ms-3 px-3 py-2">Claimed</span>-->
+                                <!--<span class="badge bg-danger text-light rounded-pill ms-3 px-3 py-2">Disposed</span>-->
                             </div>
                         </div>
                     </div>

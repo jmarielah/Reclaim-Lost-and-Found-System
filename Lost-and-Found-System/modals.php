@@ -1,3 +1,4 @@
+<!-- all modals of each page are compiled here."-->
 <!-------------------------- GENERAL MODALS -------------------------->
 <!-- USER CONTACT MODAL -->
 <div class="modal fade" id="contact-user-modal" tabindex="-1" aria-hidden="true">
@@ -200,6 +201,10 @@
 
             <div class="modal-header">
                 <h5 class="modal-title fw-bold">Item Details</h5>
+                <span class="badge bg-success text-light rounded-pill ms-3 px-3 py-2">Claimed</span>
+                <!-- Other status states (use conditional statements) -->
+                <!--<span class="badge bg-dark text-light rounded-pill ms-3 px-3 py-2">Found</span>-->
+                <!--<span class="badge bg-danger text-light rounded-pill ms-3 px-3 py-2">Disposed</span>-->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -220,13 +225,13 @@
                     </div>
 
                     <div class="col-md-7 ps-4">
-                        <h6 class="text-uppercase text-muted small fw-bold">Lost Item</h6>
+                        <h6 class="text-uppercase text-muted small fw-bold">Found Item</h6>
                         <p class="fs-5">Phone</p>
                         
                         <h6 class="text-uppercase text-muted small fw-bold">Location</h6>
                         <p class="fs-5">Library</p>
                         
-                        <h6 class="text-uppercase text-muted small fw-bold">Date Lost</h6>
+                        <h6 class="text-uppercase text-muted small fw-bold">Date Found</h6>
                         <p class="fs-5">May 16, 2026</p>
                         
                         <h6 class="text-uppercase text-muted small fw-bold">Description</h6>
@@ -255,6 +260,10 @@
 
             <div class="modal-header">
                 <h5 class="modal-title fw-bold">Item Details</h5>
+                <span class="badge bg-dark text-light rounded-pill ms-3 px-3 py-2">Found</span>
+                <!-- Other status states (use conditional statements) -->
+                <!--<span class="badge bg-success text-light rounded-pill ms-3 px-3 py-2">Claimed</span>-->
+                <!--<span class="badge bg-danger text-light rounded-pill ms-3 px-3 py-2">Disposed</span>-->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -263,25 +272,21 @@
                     <div class="col-md-5 text-center border-end">
                         <img src="img/logo.png" alt="No Image" class="img-fluid rounded shadow-sm" style="max-height: 250px;">
                         <div class="mt-4 px-2">
-                            <div class="mb-2">
-                                <label for="claimerID" class="form-label small fw-bold text-muted text-uppercase d-block text-start">Enter ID Number to Claim</label>
-                                <input type="text" class="form-control form-control-sm" id="claimerID" placeholder="Enter ID Number" required>
-                            </div>
                             <button type="button" class="btn btn-sm w-100 text-white shadow-sm" style="background-color: #311432;"
                             data-bs-toggle="modal" data-bs-target="#contact-user-modal" data-bs-dismiss="modal">
-                                Claim
+                                Contact User
                             </button>
                         </div>
                     </div>
 
                     <div class="col-md-7 ps-4">
-                        <h6 class="text-uppercase text-muted small fw-bold">Lost Item</h6>
+                        <h6 class="text-uppercase text-muted small fw-bold">Found Item</h6>
                         <p class="fs-5">Phone</p>
                         
                         <h6 class="text-uppercase text-muted small fw-bold">Location</h6>
                         <p class="fs-5">Library</p>
                         
-                        <h6 class="text-uppercase text-muted small fw-bold">Date Lost</h6>
+                        <h6 class="text-uppercase text-muted small fw-bold">Date Found</h6>
                         <p class="fs-5">May 16, 2026</p>
                         
                         <h6 class="text-uppercase text-muted small fw-bold">Description</h6>
@@ -391,13 +396,13 @@
                     </div>
 
                     <div class="col-md-7 ps-4">
-                        <h6 class="text-uppercase text-muted small fw-bold">Found Item</h6>
+                        <h6 class="text-uppercase text-muted small fw-bold">Lost Item</h6>
                         <p class="fs-5">Phone</p>
                         
                         <h6 class="text-uppercase text-muted small fw-bold">Location(Last Seen):</h6>
                         <p class="fs-5">Library</p>
                         
-                        <h6 class="text-uppercase text-muted small fw-bold">Date Found</h6>
+                        <h6 class="text-uppercase text-muted small fw-bold">Date Lost</h6>
                         <p class="fs-5">May 16, 2026</p>
                         
                         <h6 class="text-uppercase text-muted small fw-bold">Description</h6>
@@ -443,13 +448,13 @@
                     </div>
 
                     <div class="col-md-7 ps-4">
-                        <h6 class="text-uppercase text-muted small fw-bold">Found Item</h6>
+                        <h6 class="text-uppercase text-muted small fw-bold">Lost Item</h6>
                         <p class="fs-5">Phone</p>
                         
                         <h6 class="text-uppercase text-muted small fw-bold">Location(Last Seen):</h6>
                         <p class="fs-5">Library</p>
                         
-                        <h6 class="text-uppercase text-muted small fw-bold">Date Found</h6>
+                        <h6 class="text-uppercase text-muted small fw-bold">Date Lost</h6>
                         <p class="fs-5">May 16, 2026</p>
                         
                         <h6 class="text-uppercase text-muted small fw-bold">Description</h6>
@@ -471,8 +476,8 @@
     </div>
 </div>
 
-<!-- ADD ITEM MODAL -->
-<div class="modal fade" id="add-item-modal" tabindex="-1" aria-hidden="true">
+<!-- ADD REPORT MODAL -->
+<div class="modal fade" id="add-report-modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
@@ -485,7 +490,7 @@
                 <div class="modal-body">
 
                     <div class="mb-3 text-center">
-                        <label for="itemImage" class="form-label d-block text-start fw-semibold">Item Image</label>
+                        <label for="itemImage" class="form-label d-block text-start fw-semibold">Item Image (Reference)</label>
                         <div class="border rounded p-3 bg-light d-flex flex-column align-items-center justify-content-center" style="height: 150px; border-style: dashed !important;">
                             <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
                             <input type="file" class="form-control form-control-sm mt-2" id="itemImage" name="item_image" accept="image/*" required>
@@ -513,7 +518,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Location(Last Seen)</label>
-                        <input type="text" class="form-control" name="location" placeholder="Enter location found" required>
+                        <input type="text" class="form-control" name="location" placeholder="Enter location last seen" required>
                     </div>
                     <div class="mb-0">
                         <label class="form-label fw-semibold">Description/Notes</label>
@@ -524,7 +529,7 @@
                 <div class="modal-footer border-top-0">
                     <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn text-white px-4" style="background-color: #311432;">
-                        Post Item
+                        Post Report
                     </button>
                 </div>
 

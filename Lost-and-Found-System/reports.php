@@ -50,7 +50,7 @@
                         <!-- ADD ITEM -->
                         <div>
                             <button class="btn text-white shadow-sm d-flex align-items-center gap-2" style="background-color: #311432;"
-                            data-bs-toggle="modal" data-bs-target="#add-item-modal">
+                            data-bs-toggle="modal" data-bs-target="#add-report-modal">
                                 <span>Add Report</span>
                             </button>
                         </div>
