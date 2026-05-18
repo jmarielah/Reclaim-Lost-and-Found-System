@@ -318,7 +318,7 @@
 
             <!-- NOTE: only add this footer if the user is an ADMIN/UPLOADER -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Edit</button>
+                <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#edit-item-modal" data-bs-dismiss="modal" >Edit</button>
                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Delete</button>
             </div>
 
@@ -333,6 +333,69 @@
 
             <div class="modal-header">
                 <h5 class="modal-title fw-bold" id="addItemModalLabel">Post Found Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form>
+                <div class="modal-body">
+
+                    <div class="mb-3 text-center">
+                        <label for="itemImage" class="form-label d-block text-start fw-semibold">Item Image</label>
+                        <div class="border rounded p-3 bg-light d-flex flex-column align-items-center justify-content-center" style="height: 150px; border-style: dashed !important;">
+                            <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
+                            <input type="file" class="form-control form-control-sm mt-2" id="itemImage" name="item_image" accept="image/*" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Item Name</label>
+                        <input type="text" class="form-control" name="item_name" placeholder="Enter item name" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Category</label>
+                            <select class="form-select" name="category" required>
+                                <option value="" selected disabled>Select Category</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Documents">Documents</option>
+                                <option value="Personal Items">Personal Items</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Date Found</label>
+                            <input type="date" class="form-control" name="date_found" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Location Found</label>
+                        <input type="text" class="form-control" name="location" placeholder="Enter location found" required>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label fw-semibold">Description/Notes</label>
+                        <textarea class="form-control" name="description" rows="3" placeholder="Provide more specific details"></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn text-white px-4" style="background-color: #311432;">
+                        Post Item
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- EDIT ITEM MODAL -->
+<div class="modal fade" id="edit-item-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="addItemModalLabel">Edit Found Item</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -486,7 +549,7 @@
             
             <!-- NOTE: only add this footer if the user is an ADMIN/UPLOADER -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Edit</button>
+                <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#edit-report-modal">Edit</button>
                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Delete</button>
             </div>
 
@@ -501,6 +564,69 @@
 
             <div class="modal-header">
                 <h5 class="modal-title fw-bold" id="addItemModalLabel">Post a Report</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form>
+                <div class="modal-body">
+
+                    <div class="mb-3 text-center">
+                        <label for="itemImage" class="form-label d-block text-start fw-semibold">Item Image (Reference)</label>
+                        <div class="border rounded p-3 bg-light d-flex flex-column align-items-center justify-content-center" style="height: 150px; border-style: dashed !important;">
+                            <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
+                            <input type="file" class="form-control form-control-sm mt-2" id="itemImage" name="item_image" accept="image/*" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Item Name</label>
+                        <input type="text" class="form-control" name="item_name" placeholder="Enter item name" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Category</label>
+                            <select class="form-select" name="category" required>
+                                <option value="" selected disabled>Select Category</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Documents">Documents</option>
+                                <option value="Personal Items">Personal Items</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Date Lost</label>
+                            <input type="date" class="form-control" name="date_found" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Location(Last Seen)</label>
+                        <input type="text" class="form-control" name="location" placeholder="Enter location last seen" required>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label fw-semibold">Description/Notes</label>
+                        <textarea class="form-control" name="description" rows="3" placeholder="Provide more specific details"></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn text-white px-4" style="background-color: #311432;">
+                        Post Report
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- EDIT REPORT MODAL -->
+<div class="modal fade" id="edit-report-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="addItemModalLabel">Edit Report</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
