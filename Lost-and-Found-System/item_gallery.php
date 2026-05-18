@@ -9,6 +9,12 @@
     <?php
     include 'head.php';
     ?>
+    <?php
+        include 'config/config.php';
+
+        $sql = "SELECT * FROM items ORDER BY created_at DESC";
+        $result = $conn->query($sql);
+    ?>
 
     <body>
         <?php
@@ -69,19 +75,47 @@
                 <div class="row g-4 ">
                     
                     <!-- ITEM CARD (UPLOADER + ADMIN PERSPECTIVE) -->
-                    <div class="col-md-2" data-bs-toggle="modal" data-bs-target="#item-modal1">
-                        <div class="card shadow-sm border h-100" style="cursor:pointer;">
-                            <div class="card-body align-items-center text-center">
-                                <img src="img/logo.png" alt="" class="rounded" style="width:100%;height:180px;object-fit:cover;">
-                                <h6 class="fw-bold mt-2 mb-0">Item Name</h6>
-                                <small class="text-muted">Location Found: Library</small>
-                                <span class="badge bg-success text-light rounded-pill ms-3 px-3 py-2">Claimed</span>
-                                <!-- Other status states (use conditional statements) -->
-                                <!--<span class="badge bg-dark text-light rounded-pill ms-3 px-3 py-2">Found</span>-->
-                                <!--<span class="badge bg-danger text-light rounded-pill ms-3 px-3 py-2">Disposed</span>-->
-                            </div>
-                        </div>
-                    </div>
+                    <?php while ($row = $result->fetch_assoc()) { ?>
+
+    <?php
+        // status badge
+        if ($row['status'] == 'claimed') {
+            $badgeClass = 'bg-success';
+        } elseif ($row['status'] == 'disposed') {
+            $badgeClass = 'bg-danger';
+        } else {
+            $badgeClass = 'bg-dark';
+        }
+    ?>
+
+    <div class="col-md-2" data-bs-toggle="modal" data-bs-target="#item-modal1">
+
+        <div class="card shadow-sm border h-100" style="cursor:pointer;">
+            <div class="card-body align-items-center text-center">
+
+                <img src="img/logo.png"
+                     alt=""
+                     class="rounded"
+                     style="width:100%;height:180px;object-fit:cover;">
+
+                <h6 class="fw-bold mt-2 mb-0">
+                    <?= htmlspecialchars($row['item_name']) ?>
+                </h6>
+
+                <small class="text-muted">
+                    Location Found: <?= htmlspecialchars($row['location_found']) ?>
+                </small>
+
+                <span class="badge <?= $badgeClass ?> text-light rounded-pill ms-3 px-3 py-2">
+                    <?= ucfirst($row['status']) ?>
+                </span>
+
+            </div>
+        </div>
+
+    </div>
+
+<?php } ?>
 
                     <!-- ITEM CARD (NON-UPLOADER PERSPECTIVE) -->
                     <div class="col-md-2" data-bs-toggle="modal" data-bs-target="#item-modal2">
