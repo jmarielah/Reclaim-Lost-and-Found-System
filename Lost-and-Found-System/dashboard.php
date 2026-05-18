@@ -1,36 +1,33 @@
+<?php
+include 'config/auth_check.php';
+include 'config/config.php';
+
+
+$role = $_SESSION['role'] ?? 'student';
+
+$found = $conn->query("SELECT COUNT(*) AS total FROM items WHERE status='found'")
+            ->fetch_assoc()['total'];
+
+$claimed = $conn->query("SELECT COUNT(*) AS total FROM items WHERE status='claimed'")
+                ->fetch_assoc()['total'];
+
+$disposed = $conn->query("SELECT COUNT(*) AS total FROM items WHERE status='disposed'")
+                ->fetch_assoc()['total'];
+
+$reports = $conn->query("SELECT COUNT(*) AS total FROM reports WHERE ver_status='approved'")
+                ->fetch_assoc()['total'];
+
+$found_items = $conn->query("SELECT * FROM items WHERE ver_status='pending' ORDER BY item_id DESC LIMIT 10");
+
+$report_items = $conn->query("SELECT * FROM reports WHERE ver_status='pending' ORDER BY item_id DESC LIMIT 10");
+?>
+
 <!DOCTYPE html>
 <html>
     <!-- this page displays statistics (cards and pie chart) for both admin and users, only admins can access the verify section.-->
     <?php
     include 'head.php';
     ?>
-
-    <?php
-        include 'config/auth_check.php';
-        include 'config/config.php';
-
-        $role = $_SESSION['role'] ?? 'student';
-
-        // STATS (BASED ON YOUR REAL TABLES)
-        $found = $conn->query("SELECT COUNT(*) AS total FROM items WHERE status='found'")
-                    ->fetch_assoc()['total'];
-
-        $claimed = $conn->query("SELECT COUNT(*) AS total FROM items WHERE status='claimed'")
-                        ->fetch_assoc()['total'];
-
-        $disposed = $conn->query("SELECT COUNT(*) AS total FROM items WHERE status='disposed'")
-                        ->fetch_assoc()['total'];
-
-        $reports = $conn->query("SELECT COUNT(*) AS total FROM reports WHERE ver_status='approved'")
-                        ->fetch_assoc()['total'];
-
-        // LISTS
-
-        $found_items = $conn->query("SELECT * FROM items WHERE ver_status='pending' ORDER BY item_id DESC LIMIT 10");
-
-        $report_items = $conn->query("SELECT * FROM reports WHERE ver_status='pending' ORDER BY item_id DESC LIMIT 10");
-    ?>
-
 
     <body>
         <?php
