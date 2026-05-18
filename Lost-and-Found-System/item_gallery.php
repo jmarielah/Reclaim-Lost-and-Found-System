@@ -42,7 +42,7 @@ include 'config/config.php';
                                 <span class="input-group-text bg-white border-end-0">
                                     <i class="bi bi-search text-muted"></i>
                                 </span>
-                                <input type="text" class="form-control border-start-0 ps-0" placeholder="Search items...">
+                                <input type="text" id="searchInput" class="form-control border-start-0 ps-0" placeholder="Search items...">
                                 <button class="btn text-white" type="button" style="background-color: #311432;">
                                     Search
                                 </button>
@@ -93,9 +93,14 @@ include 'config/config.php';
                         }
                     ?>
 
-                    <div class="col-md-2" >
+                    <div class="col-md-2 item-card">
 
-                        <div class="card shadow-sm border h-100" data-id="<?= $row['item_id'] ?>" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#item-modal1">
+<div class="card shadow-sm border h-100 item-card-box"
+     data-id="<?= $row['item_id'] ?>"
+     data-search="<?= strtolower($row['item_name'] . ' ' . $row['location_found']) ?>"
+     style="cursor:pointer;"
+     data-bs-toggle="modal"
+     data-bs-target="#item-modal1">
                             <div class="card-body align-items-center text-center">
 
                                 <img src="img/logo.png"
@@ -296,49 +301,65 @@ function loadItem(id) {
 
 
 // CLAIM BUTTON
-const claimBtn = document.getElementById("claimBtn");
+document.getElementById("claimBtn").addEventListener("click", function () {
 
-if (claimBtn) {
+    if (!currentItemId) return;
 
-    claimBtn.addEventListener("click", function () {
+    const claimerId = document.getElementById("claimerID").value;
 
-        if (!currentItemId) return;
+    if (!claimerId) {
+        alert("Please enter Claimer ID Number");
+        return;
+    }
 
-        const claimerId = document.getElementById("claimerID").value;
+    const formData = new FormData();
+    formData.append("item_id", currentItemId);
+    formData.append("claimer_id", claimerId);
+    formData.append("type", "item");
 
-        if (!claimerId) {
-            alert("Please enter Claimer ID Number");
-            return;
-        }
+    fetch("actions/claim.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.text())
+    .then(response => {
 
-        fetch("actions/claim.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body:
-                "item_id=" + currentItemId +
-                "&claimer_id=" + encodeURIComponent(claimerId)
-        })
-        .then(res => res.text())
-        .then(response => {
+        console.log(response);
 
-            console.log(response);
+        bootstrap.Modal.getInstance(
+            document.getElementById("item-modal1")
+        ).hide();
 
-            alert("Item claimed successfully");
+        location.reload();
+    })
+    .catch(err => console.error(err));
+});
 
-            // close modal
-            bootstrap.Modal.getInstance(
-                document.getElementById("item-modal1")
-            ).hide();
 
-            // optional: reload page to refresh badge
-            location.reload();
-        })
-        .catch(err => console.error(err));
-    });
 
-}
+document.getElementById("addItemForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    formData.append("type", "item");
+
+    fetch("actions/insert.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.text())
+    .then(response => {
+
+        console.log("ITEM INSERT:", response);
+
+        bootstrap.Modal.getInstance(
+            document.getElementById("add-item-modal")
+        ).hide();
+
+        //location.reload(); // same behavior as reports
+    })
+    .catch(err => console.error(err));
+});
         </script>
 
         <script>
@@ -347,6 +368,26 @@ if (claimBtn) {
                     window.location.reload();
                 }
             });
+
+const searchInput = document.getElementById("searchInput");
+
+searchInput.addEventListener("input", function () {
+
+    const keyword = this.value.toLowerCase();
+
+    document.querySelectorAll(".item-card").forEach(card => {
+
+        const box = card.querySelector(".item-card-box");
+        const text = box.getAttribute("data-search");
+
+        if (text.includes(keyword)) {
+            card.style.display = "";
+        } else {
+            card.style.display = "none";
+        }
+    });
+
+});
         </script>
     </body>
 </html>

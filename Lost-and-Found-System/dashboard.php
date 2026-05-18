@@ -8,7 +8,7 @@ $role = $_SESSION['role'] ?? 'student';
 $found = $conn->query("SELECT COUNT(*) AS total FROM items WHERE status='found'")
             ->fetch_assoc()['total'];
 
-$claimed = $conn->query("SELECT COUNT(*) AS total FROM items WHERE status='claimed'")
+$claimed = $conn->query("SELECT COUNT(*) AS total FROM claim_history")
                 ->fetch_assoc()['total'];
 
 $disposed = $conn->query("SELECT COUNT(*) AS total FROM items WHERE status='disposed'")

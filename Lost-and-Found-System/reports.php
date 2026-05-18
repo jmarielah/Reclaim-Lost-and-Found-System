@@ -13,7 +13,7 @@ include 'config/config.php';
     <?php
         include 'config/config.php';
 
-        $sql = "SELECT * FROM reports WHERE ver_status = 'approved' ORDER BY created_at DESC";
+        $sql = "SELECT * FROM reports WHERE status = 'lost' AND ver_status = 'approved' ORDER BY created_at DESC";
         $result = $conn->query($sql);
     ?>
 
@@ -38,7 +38,7 @@ include 'config/config.php';
                                 <span class="input-group-text bg-white border-end-0">
                                     <i class="bi bi-search text-muted"></i>
                                 </span>
-                                <input type="text" class="form-control border-start-0 ps-0" placeholder="Search reports...">
+                                <input type="text" id="searchInput" class="form-control border-start-0 ps-0" placeholder="Search reports...">
                                 <button class="btn text-white" type="button" style="background-color: #311432;">
                                     Search
                                 </button>
@@ -80,13 +80,14 @@ include 'config/config.php';
                     <!-- REPORT CARD (UPLOADER) -->
                    <?php while ($row = $result->fetch_assoc()) { ?>
 
-<div class="col-md-2">
+<div class="col-md-2 report-card">
 
-    <div class="card shadow-sm border h-100"
-        data-id="<?= $row['item_id'] ?>"
-        style="cursor:pointer;"
-        data-bs-toggle="modal"
-        data-bs-target="#report-modal1">
+<div class="card shadow-sm border h-100 report-card-box"
+    data-id="<?= $row['item_id'] ?>"
+    data-search="<?= strtolower($row['item_name'] . ' ' . $row['location_lost']) ?>"
+    style="cursor:pointer;"
+    data-bs-toggle="modal"
+    data-bs-target="#report-modal1">
 
         <div class="card-body align-items-center text-center">
 
@@ -271,6 +272,83 @@ document.getElementById("editReportForm").addEventListener("submit", function (e
                 }
             });
 
+
+
+
+
+document.getElementById("addReportForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    formData.append("type", "report");
+
+    fetch("actions/insert.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.text())
+    .then(response => {
+
+        console.log(response);
+
+        bootstrap.Modal.getInstance(
+            document.getElementById("add-report-modal")
+        ).hide();
+
+        location.reload(); // simplest refresh like your edit system
+    })
+    .catch(err => console.error(err));
+});
+
+document.getElementById("claimItemBtn").addEventListener("click", function () {
+
+    if (!currentReportId) return;
+
+    const formData = new FormData();
+    formData.append("item_id", currentReportId);
+    formData.append("claimer_id", 1001); // replace with session user id
+    formData.append("type", "report");
+
+    fetch("actions/claim.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.text())
+    .then(response => {
+
+        console.log(response);
+
+        bootstrap.Modal.getInstance(
+            document.getElementById("report-modal1")
+        ).hide();
+
+        location.reload();
+    })
+    .catch(err => console.error(err));
+});
+
+
+
+const searchInput = document.getElementById("searchInput");
+
+searchInput.addEventListener("input", function () {
+
+    const keyword = this.value.toLowerCase();
+
+    document.querySelectorAll(".report-card").forEach(card => {
+
+        const box = card.querySelector(".report-card-box");
+        const text = box.getAttribute("data-search");
+
+        if (text.includes(keyword)) {
+            card.style.display = "";
+        } else {
+            card.style.display = "none";
+        }
+
+    });
+
+});
         </script>
 
     </body>

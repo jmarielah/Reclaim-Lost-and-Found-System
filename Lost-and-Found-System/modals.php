@@ -334,7 +334,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form>
+            <form id="addItemForm">
                 <div class="modal-body">
 
                     <div class="mb-3 text-center">
@@ -467,8 +467,10 @@
                     <div class="col-md-5 text-center border-end">
                         <img src="img/logo.png" alt="No Image" class="img-fluid rounded shadow-sm" style="max-height: 250px;">
                         <div class="mt-4 px-2">
-                            <button type="button" class="btn btn-sm w-100 text-white shadow-sm" style="background-color: #311432;"
-                            data-bs-dismiss="modal">
+                            <button type="button"
+                            class="btn btn-sm w-100 text-white shadow-sm"
+                            style="background-color: #311432;"
+                            id="claimItemBtn">
                                 <i class="bi bi-check2-circle"></i> Item Found
                             </button>
                         </div>
@@ -571,14 +573,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form>
+            <form id="addReportForm">
                 <div class="modal-body">
 
                     <div class="mb-3 text-center">
                         <label for="itemImage" class="form-label d-block text-start fw-semibold">Item Image (Reference)</label>
                         <div class="border rounded p-3 bg-light d-flex flex-column align-items-center justify-content-center" style="height: 150px; border-style: dashed !important;">
                             <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
-                            <input type="file" class="form-control form-control-sm mt-2" id="itemImage" name="item_image" accept="image/*" required>
+                            <input type="file" class="form-control form-control-sm mt-2" id="itemImage" name="item_image" accept="image/*">
                         </div>
                     </div>
                     <div class="mb-3">
@@ -598,12 +600,12 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Date Lost</label>
-                            <input type="date" class="form-control" name="date_found" required>
+                            <input type="date" class="form-control" name="date_lost" required>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Location(Last Seen)</label>
-                        <input type="text" class="form-control" name="location" placeholder="Enter location last seen" required>
+                        <input type="text" class="form-control" name="location_lost" placeholder="Enter location last seen" required>
                     </div>
                     <div class="mb-0">
                         <label class="form-label fw-semibold">Description/Notes</label>
