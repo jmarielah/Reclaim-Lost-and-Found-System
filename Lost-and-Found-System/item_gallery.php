@@ -1,3 +1,8 @@
+<?php
+include 'config/auth_check.php';
+include 'config/config.php';
+?>
+
 <!DOCTYPE html>
 <html>
     <!--
@@ -166,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
                 },
-                body: "id=" + currentItemId
+                body: "id=" + currentItemId + "&type=item"
             })
             .then(res => res.text())
             .then(() => {
@@ -215,7 +220,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!currentItem) return;
 
     const formData = new FormData(this);
+    formData.append("type", "item");
     formData.append("item_id", currentItem.item_id);
+    formData.append("date", document.querySelector("#edit-item-modal input[name='date_found']").value);
 
     fetch("actions/update.php", {
         method: "POST",
@@ -332,6 +339,14 @@ if (claimBtn) {
     });
 
 }
+        </script>
+
+        <script>
+            window.addEventListener("pageshow", function (event) {
+                if (event.persisted) {
+                    window.location.reload();
+                }
+            });
         </script>
     </body>
 </html>
