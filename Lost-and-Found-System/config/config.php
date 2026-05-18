@@ -2,7 +2,7 @@
 
 $host = "localhost";
 $user = "root";
-$pass = "databababase";
+$pass = "";
 $dbname = "reclaim_db";
 
 $conn = new mysqli($host, $user, $pass, $dbname);

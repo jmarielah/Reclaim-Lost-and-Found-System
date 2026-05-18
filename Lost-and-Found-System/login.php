@@ -4,6 +4,46 @@
     <?php
     include 'head.php';
     ?>
+    <?php
+session_start();
+include 'config/config.php';
+
+$error = "";
+
+if (isset($_POST['login'])) {
+
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+
+    $stmt = $conn->prepare("SELECT user_id, email, password, role FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 1) {
+
+        $user = $result->fetch_assoc();
+
+        if (password_verify($password, $user['password'])) {
+
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['email'] = $user['email'];
+            $_SESSION['role'] = $user['role'];
+
+            // redirect after login
+            header("Location: index.php");
+            exit();
+
+        } else {
+            $error = "Invalid password";
+        }
+
+    } else {
+        $error = "User not found";
+    }
+}
+?>
 
     <body>
 
@@ -25,14 +65,14 @@
                         <div class="col-auto">
                             <div class="card" style="width: 28rem;">
                                 <div class="card-body mt-4">
-                                    <form>
+                                    <form method="POST" action="">
                                         <div class="mb-3">
                                             <label for="input-email" class="form-label">Email address</label>
-                                            <input type="email" class="form-control" id="input-email">
+                                            <input type="email" class="form-control" id="input-email" name="email" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="input-password" class="form-label">Password</label>
-                                            <input type="password" class="form-control" id="input-password">
+                                            <input type="password" class="form-control" id="input-password" name="password" required>
                                         </div>
                                         <div class="mb-3">
                                             <p>New here? 
@@ -41,7 +81,7 @@
                                                 Register</a>
                                             </p>
                                         </div>
-                                        <button type="submit" 
+                                        <button type="submit" name="login"
                                         class="btn w-100 my-3" 
                                         style="background-color: #311432;color: white;">
                                             Sign in

@@ -6,8 +6,8 @@
     ?>
 
     <?php
+        include 'config/auth_check.php';
         include 'config/config.php';
-        session_start();
 
         $role = $_SESSION['role'] ?? 'student';
 
