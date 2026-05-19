@@ -7,6 +7,24 @@ include 'config/config.php';
 <html>
     <?php
     include 'head.php';
+
+
+    include 'config/config.php';
+
+    $members_sql = "SELECT * FROM users ORDER BY created_at DESC";
+$members_result = $conn->query($members_sql);
+
+$claims_sql = "
+SELECT 
+    claim_history.*,
+    items.item_name
+FROM claim_history
+LEFT JOIN items 
+    ON claim_history.item_id = items.item_id
+ORDER BY claim_date DESC
+";
+
+$claims_result = $conn->query($claims_sql);
     ?>
 
     <body>
@@ -47,7 +65,7 @@ include 'config/config.php';
                                     <span class="input-group-text bg-white border-end-0">
                                         <i class="bi bi-search text-muted"></i>
                                     </span>
-                                    <input type="text" class="form-control border-start-0" placeholder="Search by name or ID...">
+                                    <input type="text" id="memberSearch" class="form-control border-start-0" placeholder="Search by name or ID...">
                                     <button class="btn btn-outline-secondary border-start-0 btn-dark text-light" type="button">Go</button>
                                 </div>
                             </div>
@@ -64,17 +82,34 @@ include 'config/config.php';
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Orlie Lacerona</td>
-                                            <td>CCE - BSCS</td>
-                                            <td>May 16, 2026</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-light border"
-                                                data-bs-toggle="modal" data-bs-target="#contact-user-modal">View profile</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
+
+<?php while ($member = $members_result->fetch_assoc()) { ?>
+
+<tr class="member-row">
+    <td><?= htmlspecialchars($member['user_id']) ?></td>
+
+    <td>
+        <?= htmlspecialchars($member['f_name'] . ' ' . $member['l_name']) ?>
+    </td>
+
+    <td><?= htmlspecialchars($member['department']) ?></td>
+
+    <td>
+        <?= date("F d, Y", strtotime($member['created_at'])) ?>
+    </td>
+
+    <td class="text-center">
+        <button class="btn btn-sm btn-light border"
+            data-bs-toggle="modal"
+            data-bs-target="#contact-user-modal">
+            View Profile
+        </button>
+    </td>
+</tr>
+
+<?php } ?>
+
+</tbody>
                                 </table>
                             </div>
                         </div>
@@ -88,7 +123,7 @@ include 'config/config.php';
                                     <span class="input-group-text bg-white border-end-0">
                                         <i class="bi bi-search text-muted"></i>
                                     </span>
-                                    <input type="text" class="form-control border-start-0" placeholder="Search claims...">
+                                    <input type="text" id="claimSearch" class="form-control border-start-0" placeholder="Search claims...">
                                     <button class="btn btn-outline-secondary border-start-0 btn-dark text-light" type="button">Go</button>
                                 </div>
                             </div>
@@ -103,14 +138,32 @@ include 'config/config.php';
                                             <th class="text-center">Date Claimed</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>#1234</td>
-                                            <td>Phone</td>
-                                            <td>1</td>
-                                            <td class="text-center">May 16, 2026</td>
-                                        </tr>
-                                    </tbody>
+ <tbody>
+
+<?php while ($claim = $claims_result->fetch_assoc()) { ?>
+
+<tr class="claim-row">
+    <td>
+        #<?= htmlspecialchars($claim['item_id']) ?>
+    </td>
+
+    <td>
+        <?= htmlspecialchars($claim['item_name'] ?? 'Unknown Item') ?>
+    </td>
+
+    <td>
+        <?= htmlspecialchars($claim['claimer_id']) ?>
+    </td>
+
+    <td class="text-center">
+        <?= date("F d, Y", strtotime($claim['claim_date'])) ?>
+    </td>
+
+</tr>
+
+<?php } ?>
+
+</tbody>
                                 </table>
                             </div>
                         </div>
@@ -127,6 +180,52 @@ include 'config/config.php';
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
         <script>
+
+
+//
+// MEMBER SEARCH
+//
+document.getElementById("memberSearch")
+.addEventListener("input", function () {
+
+    const keyword = this.value.toLowerCase();
+
+    document.querySelectorAll(".member-row").forEach(row => {
+
+        const text = row.innerText.toLowerCase();
+
+        if (text.includes(keyword)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+
+    });
+
+});
+
+
+//
+// CLAIM SEARCH
+//
+document.getElementById("claimSearch")
+.addEventListener("input", function () {
+
+    const keyword = this.value.toLowerCase();
+
+    document.querySelectorAll(".claim-row").forEach(row => {
+
+        const text = row.innerText.toLowerCase();
+
+        if (text.includes(keyword)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+
+    });
+
+});
             window.addEventListener("pageshow", function (event) {
                 if (event.persisted) {
                     window.location.reload();
