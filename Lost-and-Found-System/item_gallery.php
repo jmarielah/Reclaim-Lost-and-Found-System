@@ -5,12 +5,6 @@ include 'config/config.php';
 
 <!DOCTYPE html>
 <html>
-    <!--
-    this page displays items found and uploaded by users in hopes of finding its owner.
-    items have 3 status (found, claimed, disposed)
-    if an item is claimed, claim details will be recorded and displayed in records
-     once claimed, it will remain visible in the item gallery with the status "claimed" for another 30 days before the system removes it
-    -->
     <?php
     include 'head.php';
     ?>
@@ -32,12 +26,10 @@ include 'config/config.php';
                 <medium class="text-secondary">Try finding your lost item here.</medium>
             </div>
         
-            <!-- SEARCH BAR AND ADD ROW -->
             <div class="row mt-3">
                 <div class="col-12">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                         <div class="d-flex gap-2 flex-grow-1 flex-md-grow-0" style="max-width: 600px;">
-                            <!-- SEARCH -->
                             <div class="input-group shadow-sm">
                                 <span class="input-group-text bg-white border-end-0">
                                     <i class="bi bi-search text-muted"></i>
@@ -48,18 +40,21 @@ include 'config/config.php';
                                 </button>
                             </div>
 
-                            <!-- FILTER -->
                             <div class="dropdown">
                                 <button class="btn btn-outline-secondary shadow-sm dropdown-toggle h-100" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-funnel"></i> Filter
+                                    <i class="bi bi-funnel"></i> <span id="filterLabel">Filter</span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="filterDropdown">
                                     <li><h6 class="dropdown-header">Category</h6></li>
-                                    <li><a class="dropdown-item" href="#">Electronics</a></li>
-                                    <li><a class="dropdown-item" href="#">Documents</a></li>
-                                    <li><h6 class="dropdown-header">Sort</h6></li>
-                                    <li><a class="dropdown-item" href="#">Newest First</a></li>
-                                    <li><a class="dropdown-item" href="#">Oldest First</a></li>
+                                    <li><a class="dropdown-item category-filter active" href="#" data-category="all">All Categories</a></li>
+                                    <li><a class="dropdown-item category-filter" href="#" data-category="Electronics">Electronics</a></li>
+                                    <li><a class="dropdown-item category-filter" href="#" data-category="Documents">Documents</a></li>
+                                    <li><a class="dropdown-item category-filter" href="#" data-category="Personal Items">Personal Items</a></li>
+                                    <li><a class="dropdown-item category-filter" href="#" data-category="Others">Others</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><h6 class="dropdown-header">Sort By</h6></li>
+                                    <li><a class="dropdown-item sort-filter active" href="#" data-sort="newest">Newest First</a></li>
+                                    <li><a class="dropdown-item sort-filter" href="#" data-sort="oldest">Oldest First</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -77,13 +72,11 @@ include 'config/config.php';
                 
                 <hr class="my-4 text-muted">
                 
-                <div class="row g-4 ">
+                <div class="row g-4" id="itemContainer" style="min-height: 300px;">
                     
-                    <!-- ITEM CARD (UPLOADER + ADMIN PERSPECTIVE) -->
                     <?php while ($row = $result->fetch_assoc()) { ?>
 
                     <?php
-                        // status badge
                         if ($row['status'] == 'claimed') {
                             $badgeClass = 'bg-success';
                         } elseif ($row['status'] == 'disposed') {
@@ -91,16 +84,20 @@ include 'config/config.php';
                         } else {
                             $badgeClass = 'bg-dark';
                         }
+                        $timestamp = strtotime($row['created_at'] ?? 'now');
+                        $categoryClean = trim($row['category'] ?? 'Others');
                     ?>
 
-                    <div class="col-md-2 item-card">
+                    <div class="col-md-2 item-card" 
+                         data-category="<?= htmlspecialchars($categoryClean) ?>" 
+                         data-time="<?= $timestamp ?>">
 
-<div class="card shadow-sm border h-100 item-card-box"
-     data-id="<?= $row['item_id'] ?>"
-     data-search="<?= strtolower($row['item_name'] . ' ' . $row['location_found']) ?>"
-     style="cursor:pointer;"
-     data-bs-toggle="modal"
-     data-bs-target="#item-modal1">
+                        <div class="card shadow-sm border h-100 item-card-box"
+                            data-id="<?= $row['item_id'] ?>"
+                            data-search="<?= strtolower(htmlspecialchars($row['item_name'] . ' ' . $row['location_found'])) ?>"
+                            style="cursor:pointer;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#item-modal1">
                             <div class="card-body align-items-center text-center">
 
                                 <img src="img/logo.png"
@@ -113,10 +110,10 @@ include 'config/config.php';
                                 </h6>
 
                                 <small class="text-muted">
-                                    Location Found: <?= htmlspecialchars($row['location_found']) ?>
+                                    Found at: <?= htmlspecialchars($row['location_found']) ?>
                                 </small>
 
-                                <span class="badge <?= $badgeClass ?> text-light rounded-pill ms-3 px-3 py-2">
+                                <span class="badge <?= $badgeClass ?> text-light rounded-pill ms-3 px-3 py-2 d-block mt-2">
                                     <?= ucfirst($row['status']) ?>
                                 </span>
 
@@ -126,23 +123,8 @@ include 'config/config.php';
                     </div>
 
                 <?php } ?>
-
-                    <!-- ITEM CARD (NON-UPLOADER PERSPECTIVE) -->
-                    <div class="col-md-2" data-bs-toggle="modal" data-bs-target="#item-modal2">
-                        <div class="card shadow-sm border h-100" style="cursor:pointer;">
-                            <div class="card-body align-items-center text-center">
-                                <img src="img/logo.png" alt="" class="rounded" style="width:100%;height:180px;object-fit:cover;">
-                                <h6 class="fw-bold mt-2 mb-0">Item Name</h6>
-                                <small class="text-muted">Location Found: Library</small>
-                                <span class="badge bg-dark text-light rounded-pill ms-3 px-3 py-2">Found</span>
-                                <!-- Other status states (use conditional statements) -->
-                                <!--<span class="badge bg-success text-light rounded-pill ms-3 px-3 py-2">Claimed</span>-->
-                                <!--<span class="badge bg-danger text-light rounded-pill ms-3 px-3 py-2">Disposed</span>-->
-                            </div>
-                        </div>
-                    </div>
-                </div>
         </div>
+</div>
 
         <?php
         include 'modals.php';
@@ -153,6 +135,9 @@ include 'config/config.php';
         <script>
 let currentItemId = null;
 let currentItem = null;
+
+const currentUserId = <?= json_encode($current_user_id ?? null) ?>;
+const currentUserRole = <?= json_encode($current_role ?? 'student') ?>;
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -204,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.querySelector("#edit-item-modal input[name='item_name']").value =
                 currentItem.item_name ?? "";
 
-            document.querySelector("#edit-item-modal input[name='location']").value =
+            document.querySelector("#edit-item-modal input[name='location_found']").value =
                 currentItem.location_found ?? "";
 
             document.querySelector("#edit-item-modal textarea[name='description']").value =
@@ -256,47 +241,48 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // LOAD ITEM FUNCTION
 function loadItem(id) {
-
     currentItemId = id;
 
     fetch("actions/get_item.php?id=" + id)
         .then(res => res.json())
         .then(data => {
+            currentItem = data;
 
-            currentItem = data; // IMPORTANT (stores for edit)
-
-            document.querySelector("#item-modal1 .item-name").innerText =
-                data.item_name ?? "N/A";
-
-            document.querySelector("#item-modal1 .item-location").innerText =
-                data.location_found ?? "N/A";
-
-            document.querySelector("#item-modal1 .item-date").innerText =
-                data.date_found ?? "N/A";
-
-            document.querySelector("#item-modal1 .item-desc").innerText =
-                data.description ?? "No description";
-
-            document.querySelector("#item-modal1 .item-uploader").innerText =
-                ((data.f_name ?? "") + " " + (data.l_name ?? "")).trim();
+            document.querySelector("#item-modal1 .item-name").innerText = data.item_name ?? "N/A";
+            document.querySelector("#item-modal1 .item-location").innerText = data.location_found ?? "N/A";
+            document.querySelector("#item-modal1 .item-date").innerText = data.date_found ?? "N/A";
+            document.querySelector("#item-modal1 .item-desc").innerText = data.description ?? "No description";
+            document.querySelector("#item-modal1 .item-uploader").innerText = ((data.f_name ?? "") + " " + (data.l_name ?? "")).trim();
 
             const badge = document.querySelector("#item-modal1 .modal-header .badge");
-
             if (data.status === "claimed") {
                 badge.className = "badge bg-success text-light rounded-pill ms-3 px-3 py-2";
                 badge.innerText = "Claimed";
-            } 
-            else if (data.status === "disposed") {
+            } else if (data.status === "disposed") {
                 badge.className = "badge bg-danger text-light rounded-pill ms-3 px-3 py-2";
                 badge.innerText = "Disposed";
-            } 
-            else {
+            } else {
                 badge.className = "badge bg-dark text-light rounded-pill ms-3 px-3 py-2";
                 badge.innerText = "Found";
             }
 
+            const adminUploaderFooter = document.getElementById("admin-uploader-footer");
+            const claimManagementBox = document.getElementById("claim-management-box");
+            const publicActionBox = document.getElementById("public-action-box");
+
+            const isAuthorized = (currentUserRole === 'admin' || currentUserId == data.uploader_id);
+
+            if (isAuthorized) {
+                adminUploaderFooter.style.display = "flex";
+                claimManagementBox.style.display = "block";
+                publicActionBox.style.display = "none";
+            } else {
+                adminUploaderFooter.style.display = "none";
+                claimManagementBox.style.display = "none";
+                publicActionBox.style.display = "block";
+            }
         })
-        .catch(err => console.error("Error loading item:", err));
+        .catch(err => console.error("Error loading item properties:", err));
 }
 
 
@@ -356,7 +342,7 @@ document.getElementById("addItemForm").addEventListener("submit", function (e) {
             document.getElementById("add-item-modal")
         ).hide();
 
-        //location.reload(); // same behavior as reports
+        location.reload();
     })
     .catch(err => console.error(err));
 });
@@ -369,25 +355,69 @@ document.getElementById("addItemForm").addEventListener("submit", function (e) {
                 }
             });
 
-const searchInput = document.getElementById("searchInput");
+            let activeCategory = "all";
+            let activeSortOrder = "newest";
 
-searchInput.addEventListener("input", function () {
+            const searchInput = document.getElementById("searchInput");
+            const itemContainer = document.getElementById("itemContainer");
 
-    const keyword = this.value.toLowerCase();
+            function filterAndSortGallery() {
+                const keyword = searchInput.value.toLowerCase();
+                const cards = Array.from(document.querySelectorAll(".item-card"));
 
-    document.querySelectorAll(".item-card").forEach(card => {
+                cards.forEach(card => {
+                    const box = card.querySelector(".item-card-box");
+                    const searchText = box.getAttribute("data-search") || "";
+                    const itemCategory = card.getAttribute("data-category") || "";
 
-        const box = card.querySelector(".item-card-box");
-        const text = box.getAttribute("data-search");
+                    const matchesSearch = searchText.includes(keyword);
+                    const matchesCategory = (activeCategory === "all" || itemCategory === activeCategory);
 
-        if (text.includes(keyword)) {
-            card.style.display = "";
-        } else {
-            card.style.display = "none";
-        }
-    });
+                    if (matchesSearch && matchesCategory) {
+                        card.style.display = "";
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
 
-});
+                cards.sort((cardA, cardB) => {
+                    const timeA = parseInt(cardA.getAttribute("data-time")) || 0;
+                    const timeB = parseInt(cardB.getAttribute("data-time")) || 0;
+
+                    return activeSortOrder === "newest" ? (timeB - timeA) : (timeA - timeB);
+                });
+
+                cards.forEach(card => itemContainer.appendChild(card));
+            }
+
+            searchInput.addEventListener("input", filterAndSortGallery);
+
+            document.querySelectorAll(".category-filter").forEach(link => {
+                link.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    
+                    document.querySelectorAll(".category-filter").forEach(item => item.classList.remove("active"));
+                    this.classList.add("active");
+
+                    activeCategory = this.getAttribute("data-category");
+                    
+                    document.getElementById("filterLabel").innerText = activeCategory === "all" ? "Filter" : activeCategory;
+                    
+                    filterAndSortGallery();
+                });
+            });
+
+            document.querySelectorAll(".sort-filter").forEach(link => {
+                link.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    document.querySelectorAll(".sort-filter").forEach(item => item.classList.remove("active"));
+                    this.classList.add("active");
+
+                    activeSortOrder = this.getAttribute("data-sort");
+                    filterAndSortGallery();
+                });
+            });
         </script>
     </body>
 </html>

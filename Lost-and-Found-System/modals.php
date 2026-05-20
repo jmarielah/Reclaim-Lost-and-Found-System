@@ -212,7 +212,7 @@
 </div>
 
 <!-------------------------- ITEM GALLERY MODALS -------------------------->
-<!-- ITEM MODAL (UPLOADER PERSPECTIVE) -->
+<!-- ITEM MODAL -->
 <div class="modal fade" id="item-modal1" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
@@ -220,9 +220,6 @@
             <div class="modal-header">
                 <h5 class="modal-title fw-bold">Item Details</h5>
                 <span class="badge rounded-pill ms-3 px-3 py-2"></span>
-                <!-- Other status states (use conditional statements) -->
-                <!--<span class="badge bg-dark text-light rounded-pill ms-3 px-3 py-2">Found</span>-->
-                <!--<span class="badge bg-danger text-light rounded-pill ms-3 px-3 py-2">Disposed</span>-->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -230,16 +227,21 @@
                 <div class="row">
                     <div class="col-md-5 text-center border-end">
                         <img src="img/logo.png" alt="No Image" class="img-fluid rounded shadow-sm" style="max-height: 250px;">
-                        <div class="mt-4 px-2">
+                        
+                        <div class="mt-4 px-2" id="claim-management-box" style="display: none;">
                             <div class="mb-2">
                                 <label for="claimerID" class="form-label small fw-bold text-muted text-uppercase d-block text-start">Claimer ID Number</label>
                                 <input type="text" class="form-control form-control-sm" id="claimerID" placeholder="Enter ID Number" required>
                             </div>
-                            <button type="button"
-                                class="btn btn-sm w-100 text-white shadow-sm"
-                                style="background-color: #311432;"
-                                id="claimBtn">
+                            <button type="button" class="btn btn-sm w-100 text-white shadow-sm" style="background-color: #311432;" id="claimBtn">
                                 <i class="bi bi-check2-circle"></i> Item Claimed
+                            </button>
+                        </div>
+
+                        <div class="mt-4 px-2" id="public-action-box" style="display: none;">
+                            <button type="button" class="btn btn-sm w-100 text-white shadow-sm" style="background-color: #311432;"
+                            data-bs-toggle="modal" data-bs-target="#contact-user-modal" data-bs-dismiss="modal">
+                                Contact User
                             </button>
                         </div>
                     </div>
@@ -263,62 +265,10 @@
                 </div>
             </div>
             
-            <!-- NOTE: only add this footer if the user is an ADMIN/UPLOADER -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-dark" id="editBtn" data-bs-toggle="modal" data-bs-target="#edit-item-modal" data-bs-dismiss="modal" >Edit</button>
+            <div class="modal-footer" id="admin-uploader-footer" style="display: none;">
+                <button type="button" class="btn btn-outline-dark" id="editBtn" data-bs-toggle="modal" data-bs-target="#edit-item-modal" data-bs-dismiss="modal">Edit</button>
                 <button type="button" class="btn btn-outline-danger" id="deleteBtn">Delete</button>
             </div>
-
-        </div>
-    </div>
-</div>
-
-<!-- ITEM MODAL (NON-UPLOADER PERSPECTIVE) -->
-<div class="modal fade" id="item-modal2" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold">Item Details</h5>
-                <span class="badge bg-dark text-light rounded-pill ms-3 px-3 py-2">Found</span>
-                <!-- Other status states (use conditional statements) -->
-                <!--<span class="badge bg-success text-light rounded-pill ms-3 px-3 py-2">Claimed</span>-->
-                <!--<span class="badge bg-danger text-light rounded-pill ms-3 px-3 py-2">Disposed</span>-->
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body p-4">
-                <div class="row">
-                    <div class="col-md-5 text-center border-end">
-                        <img src="img/logo.png" alt="No Image" class="img-fluid rounded shadow-sm" style="max-height: 250px;">
-                        <div class="mt-4 px-2">
-                            <button type="button" class="btn btn-sm w-100 text-white shadow-sm" style="background-color: #311432;"
-                            data-bs-toggle="modal" data-bs-target="#contact-user-modal" data-bs-dismiss="modal">
-                                Contact User
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="col-md-7 ps-4">
-                        <h6 class="text-uppercase text-muted small fw-bold">Found Item</h6>
-                        <p class="fs-5">Phone</p>
-                        
-                        <h6 class="text-uppercase text-muted small fw-bold">Location</h6>
-                        <p class="fs-5">Library</p>
-                        
-                        <h6 class="text-uppercase text-muted small fw-bold">Date Found</h6>
-                        <p class="fs-5">May 16, 2026</p>
-                        
-                        <h6 class="text-uppercase text-muted small fw-bold">Description</h6>
-                        <p class="fs-6">Clear casing and found in a bookshelf. Claim if it is yours.</p>
-                        
-                        <hr>
-                        <p class="small text-secondary">Uploaded by: Orlie Lacerona</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- NOTE: only add this footer if the user is an ADMIN/UPLOADER -->
 
         </div>
     </div>
@@ -429,7 +379,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Location Found</label>
-                        <input type="text" class="form-control" name="location" placeholder="Enter location found" required>
+                        <input type="text" class="form-control" name="location_found" placeholder="Enter location found" required>
                     </div>
                     <div class="mb-0">
                         <label class="form-label fw-semibold">Description/Notes</label>
@@ -451,13 +401,13 @@
 </div>
 
 <!-------------------------- REPORTS MODALS -------------------------->
-<!-- REPORT MODAL (UPLOADER PERSPECTIVE) -->
+<!-- REPORT MODAL -->
 <div class="modal fade" id="report-modal1" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title fw-bold">Item Details</h5>
+                <h5 class="modal-title fw-bold">Report Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -466,12 +416,17 @@
 
                     <div class="col-md-5 text-center border-end">
                         <img src="img/logo.png" alt="No Image" class="img-fluid rounded shadow-sm" style="max-height: 250px;">
-                        <div class="mt-4 px-2">
-                            <button type="button"
-                            class="btn btn-sm w-100 text-white shadow-sm"
-                            style="background-color: #311432;"
-                            id="claimItemBtn">
+                        
+                        <div class="mt-4 px-2" id="claim-report-box" style="display: none;">
+                            <button type="button" class="btn btn-sm w-100 text-white shadow-sm" style="background-color: #311432;" id="claimItemBtn">
                                 <i class="bi bi-check2-circle"></i> Item Found
+                            </button>
+                        </div>
+                        
+                        <div class="mt-4 px-2" id="contact-user-box" style="display: none;">
+                            <button type="button" class="btn btn-sm w-100 text-white shadow-sm" style="background-color: #311432;"
+                            data-bs-toggle="modal" data-bs-target="#contact-user-modal" data-bs-dismiss="modal">
+                                Contact User
                             </button>
                         </div>
                     </div>
@@ -480,8 +435,7 @@
                         <h6 class="text-uppercase text-muted small fw-bold">Lost Item</h6>
                         <p class="fs-5 report-name"></p>
 
-                        
-                        <h6 class="text-uppercase text-muted small fw-bold">Location(Last Seen):</h6>
+                        <h6 class="text-uppercase text-muted small fw-bold">Location (Last Seen):</h6>
                         <p class="fs-5 report-location"></p>
                         
                         <h6 class="text-uppercase text-muted small fw-bold">Date Lost</h6>
@@ -496,67 +450,9 @@
                 </div>
             </div>
             
-            <!-- NOTE: only add this footer if the user is an ADMIN/UPLOADER -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-dark" id="editReportBtn"
-                data-bs-toggle="modal"
-                data-bs-target="#edit-report-modal"
-                data-bs-dismiss="modal">Edit</button>
-                <button type="button"
-                class="btn btn-outline-danger"
-                id="deleteReportBtn">Delete</button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<!-- REPORT MODAL (NON-UPLOADER PERSPECTIVE) -->
-<div class="modal fade" id="report-modal2" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold">Item Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body p-4">
-                <div class="row">
-
-                    <div class="col-md-5 text-center border-end">
-                        <img src="img/logo.png" alt="No Image" class="img-fluid rounded shadow-sm" style="max-height: 250px;">
-                        <div class="mt-4 px-2">
-                            <button type="button" class="btn btn-sm w-100 text-white shadow-sm" style="background-color: #311432;"
-                            data-bs-toggle="modal" data-bs-target="#contact-user-modal" data-bs-dismiss="modal">
-                                Contact User
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="col-md-7 ps-4">
-                        <h6 class="text-uppercase text-muted small fw-bold">Lost Item</h6>
-                        <p class="fs-5">Phone</p>
-                        
-                        <h6 class="text-uppercase text-muted small fw-bold">Location(Last Seen):</h6>
-                        <p class="fs-5">Library</p>
-                        
-                        <h6 class="text-uppercase text-muted small fw-bold">Date Lost</h6>
-                        <p class="fs-5">May 16, 2026</p>
-                        
-                        <h6 class="text-uppercase text-muted small fw-bold">Description</h6>
-                        <p class="fs-6">Clear casing, lost it while looking for a book at Circulation A-B.</p>
-                        
-                        <hr>
-                        <p class="small text-secondary">Uploaded by: Orlie Lacerona</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- NOTE: only add this footer if the user is an ADMIN/UPLOADER -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#edit-report-modal">Edit</button>
-                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Delete</button>
+            <div class="modal-footer" id="admin-uploader-report-footer" style="display: none;">
+                <button type="button" class="btn btn-outline-dark" id="editReportBtn" data-bs-toggle="modal" data-bs-target="#edit-report-modal" data-bs-dismiss="modal">Edit</button>
+                <button type="button" class="btn btn-outline-danger" id="deleteReportBtn">Delete</button>
             </div>
 
         </div>

@@ -89,93 +89,83 @@ $report_items = $conn->query("SELECT * FROM reports WHERE ver_status='pending' O
             </div>
 
             <!-- VERIFY SECTION -->
-            <div class="row g-3 mb-5">
-                <!-- VERIFY ITEMS CARD -->
-                <?php // if ($role === 'admin') { ?>
-                <div class="col-md-6">
-                    <div class="card h-100 shadow-sm border d-flex flex-column" style="max-height: 500px;">
+            <?php if ($role === 'admin') { ?>
+                <div class="row g-3 mb-5">
+                    <div class="col-md-6">
+                        <div class="card h-100 shadow-sm border d-flex flex-column" style="max-height: 500px;">
 
-                        <div class="p-4 pb-0">
-                            <div class="text-center">
-                                <h4 class="fw-bold mb-0">Verify Found Items</h4>
+                            <div class="p-4 pb-0">
+                                <div class="text-center">
+                                    <h4 class="fw-bold mb-0">Verify Found Items</h4>
+                                </div>
+                                <hr class="text-muted mt-3 mb-0">
                             </div>
-                            <hr class="text-muted mt-3 mb-0">
-                        </div>
 
-                        <div class="card-body p-4 overflow-y-auto flex-grow-1">
+                            <div class="card-body p-4 overflow-y-auto flex-grow-1">
 
-                            <!-- FOUND ITEM CARD -->
-                            <?php while ($row = $found_items->fetch_assoc()) { ?>
-                                <div class="row mb-3">
-                                    <div class="card shadow-sm border py-2 d-flex flex-row align-items-center"
-                                        style="cursor:pointer;"
-                                        onclick="loadItem(<?= $row['item_id'] ?>, 'item')"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#verify-item-modal">
+                                <?php while ($row = $found_items->fetch_assoc()) { ?>
+                                    <div class="row mb-3">
+                                        <div class="card shadow-sm border py-2 d-flex flex-row align-items-center"
+                                            style="cursor:pointer;"
+                                            onclick="loadItem(<?= $row['item_id'] ?>, 'item')"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#verify-item-modal">
 
-                                        <img src="img/logo.png" class="rounded me-3" style="width:60px;height:60px;">
+                                            <img src="img/logo.png" class="rounded me-3" style="width:60px;height:60px;">
 
-                                        <div>
-                                            <h6 class="mb-0 fw-semibold">
-                                                <?= htmlspecialchars($row['item_name']) ?>
-                                            </h6>
-                                            <small class="text-muted">
-                                                <?= htmlspecialchars($row['location_found']) ?>
-                                            </small>
+                                            <div>
+                                                <h6 class="mb-0 fw-semibold">
+                                                    <?= htmlspecialchars($row['item_name']) ?>
+                                                </h6>
+                                                <small class="text-muted">
+                                                    <?= htmlspecialchars($row['location_found']) ?>
+                                                </small>
+                                            </div>
                                         </div>
                                     </div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card h-100 shadow-sm border d-flex flex-column" style="max-height: 500px;">
+
+                            <div class="p-4 pb-0">
+                                <div class="text-center">
+                                    <h4 class="fw-bold mb-0">Verify Reports</h4>
                                 </div>
-                            <?php } ?>
-                            <!--Note: use a loop to add more cards based sa db, may scroll na naka implement-->
+                                <hr class="text-muted mt-3 mb-0">
+                            </div>
+
+                            <div class="card-body p-4 overflow-y-auto flex-grow-1">
+
+                                <?php while ($row = $report_items->fetch_assoc()) { ?>
+                                    <div class="row mb-3">
+                                        <div class="card shadow-sm border py-2 d-flex flex-row align-items-center"
+                                            style="cursor:pointer;"
+                                            onclick="loadItem(<?= $row['item_id'] ?>, 'report')"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#verify-report-modal">
+
+                                            <img src="img/logo.png" class="rounded me-3" style="width:60px;height:60px;">
+
+                                            <div>
+                                                <h6 class="mb-0 fw-semibold">
+                                                    <?= htmlspecialchars($row['item_name']) ?>
+                                                </h6>
+                                                <small class="text-muted">
+                                                    <?= htmlspecialchars($row['location_lost']) ?>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <?php// } ?>
-
-                <!-- VERIFY REPORTS CARD -->
-                <?php // if ($role === 'admin') { ?>
-                <div class="col-md-6">
-                    <div class="card h-100 shadow-sm border d-flex flex-column" style="max-height: 500px;">
-
-                        <div class="p-4 pb-0">
-                            <div class="text-center">
-                                <h4 class="fw-bold mb-0">Verify Reports</h4>
-                            </div>
-                            <hr class="text-muted mt-3 mb-0">
-                        </div>
-
-                        <div class="card-body p-4 overflow-y-auto flex-grow-1">
-
-                            <!-- REPORT CARD -->
-                            <?php while ($row = $report_items->fetch_assoc()) { ?>
-                                <div class="row mb-3">
-                                    <div class="card shadow-sm border py-2 d-flex flex-row align-items-center"
-                                        style="cursor:pointer;"
-                                        onclick="loadItem(<?= $row['item_id'] ?>, 'report')"
-
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#verify-report-modal">
-
-                                        <img src="img/logo.png" class="rounded me-3" style="width:60px;height:60px;">
-
-                                        <div>
-                                            <h6 class="mb-0 fw-semibold">
-                                                <?= htmlspecialchars($row['item_name']) ?>
-                                            </h6>
-                                            <small class="text-muted">
-                                                <?= htmlspecialchars($row['location_lost']) ?>
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php } ?>
-                            <!--Note: use a loop to add more cards based sa db, may scroll na naka implement-->
-                        </div>
-                    </div>
-                </div>
-                <?php //} ?>
-            </div>
-        </div>
+            <?php } ?>
 
         <?php
         include 'modals.php';
