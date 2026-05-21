@@ -15,7 +15,7 @@
                     OL
                 </div>
 
-                <h5 class="fw-bold mb-1">Orlie Lacerona</h5>
+                <h5 class="fw-bold mb-1 uploader-name"></h5>
                 <p class="text-muted small mb-4">Item Uploader</p>
 
                 <hr class="my-3 mx-4 opacity-50">
@@ -27,7 +27,7 @@
                         </div>
                         <div>
                             <small class="text-muted d-block">Email Address</small>
-                            <span class="fw-semibold">email@example.com</span>
+                            <span class="fw-semibold email-value"></span>
                         </div>
                     </div>
 
@@ -37,7 +37,7 @@
                         </div>
                         <div>
                             <small class="text-muted d-block">Phone Number</small>
-                            <span class="fw-semibold">+63 912 345 6789</span>
+                            <span class="fw-semibold phone-value"></span>
                         </div>
                     </div>
 
@@ -47,7 +47,7 @@
                         </div>
                         <div>
                             <small class="text-muted d-block">Department/Office</small>
-                            <span class="fw-semibold">College of Computing Education - BSCS</span>
+                            <span class="fw-semibold department-value"></span>
                         </div>
                     </div>
                 </div>
@@ -240,7 +240,7 @@
 
                         <div class="mt-4 px-2" id="public-action-box" style="display: none;">
                             <button type="button" class="btn btn-sm w-100 text-white shadow-sm" style="background-color: #311432;"
-                            data-bs-toggle="modal" data-bs-target="#contact-user-modal" data-bs-dismiss="modal">
+                            data-bs-toggle="modal" id="contactUserBtn">
                                 Contact User
                             </button>
                         </div>
@@ -425,7 +425,7 @@
                         
                         <div class="mt-4 px-2" id="contact-user-box" style="display: none;">
                             <button type="button" class="btn btn-sm w-100 text-white shadow-sm" style="background-color: #311432;"
-                            data-bs-toggle="modal" data-bs-target="#contact-user-modal" data-bs-dismiss="modal">
+                            data-bs-toggle="modal" onclick="openContactModal()" id="contactUserBtn">
                                 Contact User
                             </button>
                         </div>

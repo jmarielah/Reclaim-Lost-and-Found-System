@@ -115,6 +115,7 @@ include 'config/config.php';
         <script>
 let currentReportId = null;
 let currentReport = null;
+let currentUploaderId = null;
 
 const currentUserId = <?= json_encode($current_user_id ?? null) ?>;
 const currentUserRole = <?= json_encode($current_role ?? 'student') ?>;
@@ -262,6 +263,8 @@ function loadReport(id) {
                 claimReportBox.style.display = "none";
                 contactUserBox.style.display = "block";
             }
+
+            currentUploaderId = data.uploader_id;
         })
         .catch(err => console.error("Error loading report:", err));
 }
@@ -338,6 +341,39 @@ function loadReport(id) {
                     filterAndSortGallery();
                 });
             });
+
+            document.getElementById("contactUserBtn").addEventListener("click", function () {
+                openContactModal();
+            });
+
+
+function openContactModal() {
+    if (!currentUploaderId) return;
+
+    fetch("actions/get_user.php?id=" + currentUploaderId)
+        .then(res => res.json())
+        .then(data => {
+
+            document.querySelector(".uploader-name").innerText =
+                (data.f_name ?? "") + " " + (data.l_name ?? "");
+
+            document.querySelector(".email-value").innerText = data.email ?? "N/A";
+            document.querySelector(".phone-value").innerText = data.phone_no ?? "N/A";
+            document.querySelector(".department-value").innerText = data.department ?? "N/A";
+
+            document.querySelector("#contact-user-modal .rounded-circle").innerText =
+                (data.f_name?.[0] ?? "") + (data.l_name?.[0] ?? "");
+
+            const modalEl = document.getElementById("contact-user-modal");
+            const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+
+            modal.show();
+        });
+}
+
+
+
+
         </script>
     </body>
 </html>

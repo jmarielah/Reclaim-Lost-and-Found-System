@@ -418,6 +418,48 @@ document.getElementById("addItemForm").addEventListener("submit", function (e) {
                     filterAndSortGallery();
                 });
             });
+
+
+document.getElementById("contactUserBtn").addEventListener("click", function () {
+    if (!currentItem || !currentItem.uploader_id) return;
+
+    fetch("actions/get_user.php?id=" + currentItem.uploader_id)
+        .then(res => res.json())
+        .then(user => {
+
+            // handle empty response []
+            if (!user || Object.keys(user).length === 0) {
+                alert("User information not found.");
+                return;
+            }
+
+            const fullName = ((user.f_name ?? "") + " " + (user.l_name ?? "")).trim();
+
+            // initials
+            const initials = fullName
+                .split(" ")
+                .filter(Boolean)
+                .map(n => n[0])
+                .join("")
+                .toUpperCase();
+
+            // fill modal fields
+            document.querySelector("#contact-user-modal .uploader-name").innerText = fullName || "Unknown";
+            document.querySelector("#contact-user-modal .email-value").innerText = user.email ?? "N/A";
+            document.querySelector("#contact-user-modal .phone-value").innerText = user.phone_no ?? "N/A";
+            document.querySelector("#contact-user-modal .department-value").innerText = user.department ?? "N/A";
+
+            // avatar initials
+            document.querySelector("#contact-user-modal .rounded-circle").innerText = initials || "U";
+
+            // show modal
+            new bootstrap.Modal(document.getElementById("contact-user-modal")).show();
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Failed to load user info.");
+        });
+});
         </script>
     </body>
 </html>

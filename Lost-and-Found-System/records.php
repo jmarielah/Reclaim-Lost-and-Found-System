@@ -99,9 +99,9 @@ $claims_result = $conn->query($claims_sql);
     </td>
 
     <td class="text-center">
-        <button class="btn btn-sm btn-light border"
-            data-bs-toggle="modal"
-            data-bs-target="#contact-user-modal">
+        <button class="btn btn-sm btn-light border view-profile-btn"
+            data-user-id="<?= $member['user_id'] ?>"
+            type="button">
             View Profile
         </button>
     </td>
@@ -231,6 +231,49 @@ document.getElementById("claimSearch")
                     window.location.reload();
                 }
             });
+
+
+document.querySelectorAll(".view-profile-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+
+        const userId = this.getAttribute("data-user-id");
+        if (!userId) return;
+
+        fetch("actions/get_user.php?id=" + userId)
+            .then(res => res.json())
+            .then(user => {
+
+                if (!user || Object.keys(user).length === 0) {
+                    alert("User not found.");
+                    return;
+                }
+
+                const fullName = ((user.f_name ?? "") + " " + (user.l_name ?? "")).trim();
+
+                const initials = fullName
+                    .split(" ")
+                    .filter(Boolean)
+                    .map(n => n[0])
+                    .join("")
+                    .toUpperCase();
+
+                // Fill modal fields
+                document.querySelector("#contact-user-modal .uploader-name").innerText = fullName || "Unknown";
+                document.querySelector("#contact-user-modal .email-value").innerText = user.email ?? "N/A";
+                document.querySelector("#contact-user-modal .phone-value").innerText = user.phone_no ?? "N/A";
+                document.querySelector("#contact-user-modal .department-value").innerText = user.department ?? "N/A";
+
+                document.querySelector("#contact-user-modal .rounded-circle").innerText = initials || "U";
+
+                // Open modal
+                new bootstrap.Modal(document.getElementById("contact-user-modal")).show();
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Failed to load profile.");
+            });
+    });
+});
         </script>
 
     </body>
